@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PVCIST · Plataforma de Valoração Comunitária e Inovação Social Territorial — Embrapa Maranhão</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --mata:#123B33;          /* verde mata profunda */
+  --mata-2:#1C5247;
+  --babacu:#3E8464;        /* verde folha de babaçu */
+  --babacu-claro:#DCEDE2;
+  --palha:#F7F4EA;         /* palha trançada — fundo */
+  --palha-2:#EFE9D8;
+  --azulejo:#1F5FA8;       /* azul dos azulejos de São Luís */
+  --azulejo-claro:#E3EDF8;
+  --barro:#B4552D;         /* barro/telha */
+  --barro-claro:#F6E4DA;
+  --sol:#E0A526;           /* sol / palha dourada */
+  --sol-claro:#FBF0D6;
+  --tinta:#1E2B27;
+  --tinta-suave:#4C5B55;
+  --linha:#DCD6C4;
+  --branco:#FFFFFF;
+  --raio:14px;
+  --sombra:0 2px 8px rgba(18,59,51,.08);
+  --sombra-2:0 12px 32px rgba(18,59,51,.14);
+  --fonte-display:"Bricolage Grotesque",system-ui,sans-serif;
+  --fonte-texto:"Instrument Sans",system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--fonte-texto);background:var(--palha);color:var(--tinta);line-height:1.6;font-size:16px}
+img{max-width:100%}
+button{font-family:inherit;cursor:pointer}
+h1,h2,h3,h4{font-family:var(--fonte-display);line-height:1.15;color:var(--mata)}
+.container{max-width:1180px;margin:0 auto;padding:0 24px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.74rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--babacu)}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--sol);display:inline-block}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+
+/* ---------- Header / navegação ---------- */
+header.topo{position:sticky;top:0;z-index:60;background:var(--mata);color:#fff;box-shadow:0 2px 12px rgba(0,0,0,.18)}
+.topo-inner{display:flex;align-items:center;gap:16px;padding:12px 24px;max-width:1280px;margin:0 auto;flex-wrap:wrap}
+.marca{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
+.marca-simbolo{width:42px;height:42px;border-radius:10px;background:
+  conic-gradient(from 45deg,var(--azulejo) 0 25%,var(--babacu) 0 50%,var(--sol) 0 75%,var(--barro) 0 100%);
+  display:grid;place-items:center;flex:none}
+.marca-simbolo span{width:16px;height:16px;background:var(--palha);border-radius:4px;transform:rotate(45deg)}
+.marca b{font-family:var(--fonte-display);font-size:1.06rem;letter-spacing:.02em;display:block;line-height:1.1}
+.marca small{font-size:.68rem;opacity:.75;letter-spacing:.08em;text-transform:uppercase}
+nav.abas{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+nav.abas button{background:transparent;border:1px solid transparent;color:#DCEDE2;padding:9px 14px;border-radius:999px;font-size:.86rem;font-weight:600;transition:.18s}
+nav.abas button:hover{background:rgba(255,255,255,.1)}
+nav.abas button.ativa{background:var(--sol);color:var(--mata);border-color:var(--sol)}
+nav.abas button:focus-visible{outline:3px solid var(--sol);outline-offset:2px}
+
+/* ---------- Painéis (abas) ---------- */
+.painel{display:none;animation:surge .35s ease}
+.painel.ativo{display:block}
+@keyframes surge{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;background:var(--mata);color:#fff;overflow:hidden}
+.hero-azulejos{position:absolute;inset:0;opacity:.13;pointer-events:none;
+  background-image:
+   radial-gradient(circle at 50% 50%, transparent 34%, var(--azulejo) 35% 40%, transparent 41%),
+   linear-gradient(45deg, transparent 46%, var(--babacu-claro) 47% 53%, transparent 54%);
+  background-size:72px 72px}
+.hero-inner{position:relative;padding:72px 24px 84px;max-width:1180px;margin:0 auto}
+.hero .eyebrow{color:var(--sol)}
+.hero h1{color:#fff;font-size:clamp(2rem,4.6vw,3.4rem);font-weight:700;max-width:19ch;margin:14px 0 18px;letter-spacing:-.01em}
+.hero h1 em{font-style:normal;color:var(--sol)}
+.hero p.sub{max-width:62ch;color:#D7E4DC;font-size:1.06rem}
+.hero-acoes{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:999px;font-weight:700;font-size:.92rem;border:2px solid transparent;text-decoration:none;transition:.18s}
+.btn-sol{background:var(--sol);color:var(--mata)}
+.btn-sol:hover{filter:brightness(1.08)}
+.btn-contorno{border-color:rgba(255,255,255,.4);color:#fff;background:transparent}
+.btn-contorno:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+.hero-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:rgba(255,255,255,.16);border-radius:var(--raio);overflow:hidden;margin-top:44px;max-width:820px}
+.hero-stats div{background:rgba(18,59,51,.88);padding:16px 18px}
+.hero-stats b{font-family:var(--fonte-display);font-size:1.5rem;color:var(--sol);display:block}
+.hero-stats span{font-size:.78rem;color:#CBDDD3;letter-spacing:.03em}
+
+/* ---------- Seções ---------- */
+section.bloco{padding:58px 0}
+section.bloco.alt{background:var(--branco)}
+.bloco-cab{max-width:760px;margin-bottom:34px}
+.bloco-cab h2{font-size:clamp(1.5rem,3vw,2.15rem);margin:10px 0 12px}
+.bloco-cab p{color:var(--tinta-suave)}
+
+.grade{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+
+.cartao{background:var(--branco);border:1px solid var(--linha);border-radius:var(--raio);padding:22px;box-shadow:var(--sombra);transition:.2s}
+.cartao:hover{transform:translateY(-3px);box-shadow:var(--sombra-2)}
+.cartao h3{font-size:1.06rem;margin-bottom:8px}
+.cartao p{font-size:.92rem;color:var(--tinta-suave)}
+.cartao .num{font-family:var(--fonte-display);font-weight:700;font-size:.8rem;color:var(--barro);letter-spacing:.1em}
+.icone{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:1.3rem;margin-bottom:12px}
+.i-verde{background:var(--babacu-claro)} .i-azul{background:var(--azulejo-claro)} .i-sol{background:var(--sol-claro)} .i-barro{background:var(--barro-claro)}
+
+.selo{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;margin:2px}
+.s-verde{background:var(--babacu-claro);color:var(--mata)} .s-azul{background:var(--azulejo-claro);color:var(--azulejo)}
+.s-sol{background:var(--sol-claro);color:#8a6410} .s-barro{background:var(--barro-claro);color:var(--barro)}
+
+/* faixa consequência */
+.faixa{background:linear-gradient(120deg,var(--mata),var(--mata-2));color:#EAF3EE;border-radius:var(--raio);padding:26px 28px;display:flex;gap:18px;align-items:flex-start}
+.faixa b{color:var(--sol)}
+.faixa .icone{background:rgba(255,255,255,.12);margin:0;flex:none}
+
+/* ---------- Acordeão ---------- */
+.acordeao{border:1px solid var(--linha);border-radius:var(--raio);background:var(--branco);overflow:hidden;margin-bottom:12px}
+.acordeao > button{width:100%;display:flex;align-items:center;gap:14px;background:none;border:0;padding:18px 20px;text-align:left;font-size:1rem;font-weight:700;color:var(--mata)}
+.acordeao > button .chev{margin-left:auto;transition:.25s;color:var(--babacu);flex:none}
+.acordeao.aberto > button .chev{transform:rotate(180deg)}
+.acordeao .corpo{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.acordeao .corpo-inner{padding:0 20px 20px;color:var(--tinta-suave);font-size:.94rem}
+.acordeao .corpo-inner h4{margin:14px 0 6px;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;color:var(--barro)}
+.acordeao .corpo-inner ul{padding-left:20px;margin:6px 0}
+.acordeao .corpo-inner li{margin:4px 0}
+.acordeao > button:focus-visible{outline:3px solid var(--azulejo);outline-offset:-3px}
+
+/* ---------- Tabelas ---------- */
+.tabela-envolucro{overflow-x:auto;border:1px solid var(--linha);border-radius:var(--raio);background:var(--branco)}
+table.dim{width:100%;border-collapse:collapse;font-size:.9rem;min-width:640px}
+table.dim th{background:var(--mata);color:#fff;text-align:left;padding:12px 16px;font-family:var(--fonte-display);font-weight:600;letter-spacing:.02em}
+table.dim td{padding:12px 16px;border-top:1px solid var(--linha);vertical-align:top}
+table.dim tr:nth-child(even) td{background:var(--palha)}
+table.dim td:first-child{font-weight:700;color:var(--mata);white-space:nowrap}
+
+/* ---------- Sliders / simuladores ---------- */
+.simulador{background:var(--branco);border:1px solid var(--linha);border-radius:var(--raio);padding:26px;box-shadow:var(--sombra)}
+.simulador h3{font-size:1.2rem;margin-bottom:4px}
+.sim-grade{display:grid;grid-template-columns:1fr 300px;gap:30px;margin-top:20px}
+@media(max-width:840px){.sim-grade{grid-template-columns:1fr}}
+.controle{margin-bottom:14px}
+.controle .rotulo{display:flex;justify-content:space-between;font-size:.86rem;font-weight:600;margin-bottom:4px}
+.controle .rotulo span.peso{color:var(--tinta-suave);font-weight:500}
+.controle .rotulo output{font-family:var(--fonte-display);color:var(--barro);font-weight:700}
+input[type=range]{width:100%;accent-color:var(--babacu);height:26px}
+input[type=range]:focus-visible{outline:3px solid var(--azulejo);outline-offset:2px}
+.resultado-caixa{background:var(--palha);border:1px dashed var(--babacu);border-radius:var(--raio);padding:22px;text-align:center;position:sticky;top:90px;align-self:start}
+.medidor{position:relative;width:190px;height:105px;margin:8px auto 4px;overflow:hidden}
+.medidor svg{display:block}
+.resultado-num{font-family:var(--fonte-display);font-size:2.6rem;font-weight:700;color:var(--mata);line-height:1}
+.resultado-classe{font-weight:700;font-size:.95rem;margin-top:6px;padding:5px 14px;border-radius:999px;display:inline-block}
+.resultado-desc{font-size:.84rem;color:var(--tinta-suave);margin-top:12px;text-align:left}
+
+/* ---------- Infográfico passo a passo ---------- */
+.jornada{position:relative;margin:36px 0 26px}
+.trilha{display:grid;grid-template-columns:repeat(7,1fr);gap:0;position:relative}
+.trilha::before{content:"";position:absolute;top:33px;left:7%;right:7%;height:4px;border-radius:4px;
+  background:repeating-linear-gradient(90deg,var(--babacu) 0 14px,transparent 14px 24px)}
+.no-etapa{background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:10px;padding:6px 4px;position:relative;color:var(--tinta)}
+.no-etapa .bolha{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;font-size:1.5rem;background:var(--branco);border:3px solid var(--linha);transition:.22s;position:relative;z-index:1;box-shadow:var(--sombra)}
+.no-etapa .bolha::after{content:attr(data-n);position:absolute;top:-7px;right:-7px;width:24px;height:24px;border-radius:50%;background:var(--barro);color:#fff;font-size:.7rem;font-weight:800;display:grid;place-items:center;font-family:var(--fonte-display)}
+.no-etapa span.tit{font-size:.76rem;font-weight:700;text-align:center;line-height:1.25;max-width:120px;color:var(--tinta-suave)}
+.no-etapa:hover .bolha{transform:translateY(-4px);border-color:var(--babacu)}
+.no-etapa.ativa .bolha{background:var(--mata);border-color:var(--sol);color:#fff;transform:scale(1.06)}
+.no-etapa.ativa span.tit{color:var(--mata)}
+.no-etapa:focus-visible{outline:none}
+.no-etapa:focus-visible .bolha{outline:3px solid var(--azulejo);outline-offset:3px}
+.ciclo-aviso{display:flex;align-items:center;justify-content:center;gap:10px;font-size:.82rem;color:var(--babacu);font-weight:700;margin-top:6px}
+.ciclo-aviso svg{flex:none}
+@media(max-width:900px){
+  .trilha{grid-template-columns:repeat(4,1fr);row-gap:22px}
+  .trilha::before{display:none}
+}
+@media(max-width:560px){.trilha{grid-template-columns:repeat(2,1fr)}}
+
+.detalhe-etapa{background:var(--branco);border:1px solid var(--linha);border-left:6px solid var(--sol);border-radius:var(--raio);padding:30px;box-shadow:var(--sombra-2);margin-top:10px}
+.detalhe-cab{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;margin-bottom:18px}
+.detalhe-cab .icone-g{width:64px;height:64px;border-radius:18px;background:var(--babacu-claro);display:grid;place-items:center;font-size:2rem;flex:none}
+.detalhe-cab h3{font-size:1.45rem}
+.detalhe-cab .fase{font-size:.74rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--barro)}
+.detalhe-cab p.resumo{color:var(--tinta-suave);max-width:70ch;margin-top:4px}
+.detalhe-grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:8px}
+.mini-bloco{background:var(--palha);border-radius:12px;padding:16px}
+.mini-bloco h4{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--babacu);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.mini-bloco ul{list-style:none}
+.mini-bloco li{font-size:.88rem;padding:4px 0 4px 18px;position:relative;color:var(--tinta)}
+.mini-bloco li::before{content:"›";position:absolute;left:2px;color:var(--barro);font-weight:800}
+.nav-etapas{display:flex;justify-content:space-between;margin-top:22px;gap:10px;flex-wrap:wrap}
+.nav-etapas button{background:var(--palha);border:1px solid var(--linha);border-radius:999px;padding:10px 18px;font-weight:700;font-size:.86rem;color:var(--mata);transition:.18s}
+.nav-etapas button:hover{background:var(--babacu-claro);border-color:var(--babacu)}
+.barra-progresso{height:6px;background:var(--palha-2);border-radius:6px;overflow:hidden;margin:18px 0 4px}
+.barra-progresso i{display:block;height:100%;background:linear-gradient(90deg,var(--babacu),var(--sol));border-radius:6px;transition:width .4s ease}
+
+/* SWOT interativo */
+.fofa{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+@media(max-width:640px){.fofa{grid-template-columns:1fr}}
+.fofa button.quad{border:0;border-radius:12px;padding:18px;text-align:left;color:#fff;font-weight:700;font-size:1rem;transition:.2s;position:relative}
+.fofa button.quad small{display:block;font-weight:500;font-size:.78rem;opacity:.92;margin-top:4px}
+.fofa .q-f{background:var(--babacu)} .fofa .q-fr{background:var(--barro)} .fofa .q-o{background:var(--azulejo)} .fofa .q-a{background:#7A5A18}
+.fofa button.quad:hover{transform:scale(1.02)}
+.fofa button.quad.sel{outline:4px solid var(--sol);outline-offset:2px}
+.fofa-detalhe{grid-column:1/-1;background:var(--palha);border-radius:12px;padding:18px;font-size:.9rem;display:none}
+.fofa-detalhe.aberto{display:block}
+.fofa-detalhe h4{color:var(--mata);margin-bottom:6px}
+.fofa-detalhe ul{padding-left:20px;color:var(--tinta-suave)}
+.fofa-detalhe li{margin:3px 0}
+
+/* Decisão portfólio */
+.decisao{margin-top:16px;text-align:center}
+.losango{display:inline-block;background:var(--sol);color:var(--mata);font-weight:800;padding:20px 26px;transform:rotate(0);border-radius:14px;border:3px dashed var(--mata);font-size:.98rem;max-width:420px}
+.ramos{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+@media(max-width:640px){.ramos{grid-template-columns:1fr}}
+.ramo{border-radius:12px;padding:18px;border:2px solid var(--linha);background:var(--branco);cursor:pointer;text-align:left;transition:.2s;font-family:inherit}
+.ramo b{display:flex;align-items:center;gap:8px;font-size:.95rem;color:var(--mata)}
+.ramo p{font-size:.85rem;color:var(--tinta-suave);margin-top:6px}
+.ramo.sim:hover,.ramo.sim.sel{border-color:var(--babacu);background:var(--babacu-claro)}
+.ramo.nao:hover,.ramo.nao.sel{border-color:var(--azulejo);background:var(--azulejo-claro)}
+.ramo-conteudo{display:none;margin-top:14px;background:var(--palha);border-radius:12px;padding:16px;text-align:left;font-size:.9rem}
+.ramo-conteudo.aberto{display:block}
+.ramo-conteudo ul{padding-left:20px;color:var(--tinta-suave)}
+.ramo-conteudo li{margin:4px 0}
+.tag-tec{display:inline-block;background:var(--branco);border:1px solid var(--babacu);color:var(--mata);border-radius:999px;padding:4px 12px;font-size:.78rem;font-weight:700;margin:3px}
+
+/* ---------- Cartões de valoração ---------- */
+.val-tipos{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.val-cartao{border-radius:var(--raio);padding:22px;color:#fff;min-height:190px;display:flex;flex-direction:column}
+.val-cartao h3{color:#fff;font-size:1.05rem;display:flex;gap:10px;align-items:center}
+.val-cartao p.def{font-size:.86rem;opacity:.94;margin:8px 0 12px}
+.val-cartao .ex{margin-top:auto;font-size:.78rem;background:rgba(255,255,255,.16);border-radius:10px;padding:10px 12px;line-height:1.5}
+.v-obj{background:linear-gradient(140deg,var(--mata),var(--babacu))}
+.v-per{background:linear-gradient(140deg,#8a5a1a,var(--sol));color:#2b2107}
+.v-per h3{color:#2b2107}
+.v-soc{background:linear-gradient(140deg,#123b66,var(--azulejo))}
+.v-pot{background:linear-gradient(140deg,#7a3517,var(--barro))}
+
+/* fluxo cadeia de valor */
+.cadeia{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;counter-reset:passo}
+.cadeia .elo{background:var(--branco);border:1px solid var(--linha);border-radius:12px;padding:18px;position:relative;counter-increment:passo}
+.cadeia .elo::before{content:counter(passo,decimal-leading-zero);font-family:var(--fonte-display);font-weight:800;color:var(--sol);font-size:1.3rem}
+.cadeia .elo h4{font-size:.95rem;margin:6px 0 4px}
+.cadeia .elo p{font-size:.82rem;color:var(--tinta-suave)}
+
+/* rodapé */
+footer{background:var(--mata);color:#BFD4CA;margin-top:70px}
+.rodape-inner{max-width:1180px;margin:0 auto;padding:44px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:28px;font-size:.88rem}
+footer h4{color:#fff;font-size:.95rem;margin-bottom:10px}
+footer ul{list-style:none}
+footer li{margin:5px 0}
+footer .base{border-top:1px solid rgba(255,255,255,.15);padding:16px 24px;text-align:center;font-size:.78rem}
+.chip-ods{display:inline-block;background:rgba(255,255,255,.12);border-radius:8px;padding:4px 10px;margin:3px;font-size:.76rem}
+
+/* barra de módulos */
+.modulos-fluxo{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.mod-cartao{background:var(--branco);border:1px solid var(--linha);border-top:5px solid var(--babacu);border-radius:var(--raio);padding:20px;transition:.2s}
+.mod-cartao:hover{transform:translateY(-3px);box-shadow:var(--sombra-2)}
+.mod-cartao .mod-n{font-family:var(--fonte-display);font-weight:800;color:var(--barro);font-size:.78rem;letter-spacing:.12em}
+.mod-cartao h3{font-size:1.02rem;margin:6px 0 8px}
+.mod-cartao p{font-size:.86rem;color:var(--tinta-suave)}
+.mod-cartao.nucleo{border-top-color:var(--sol);background:linear-gradient(160deg,#fff, var(--sol-claro))}
+
+.nota-fonte{font-size:.78rem;color:var(--tinta-suave);margin-top:14px;font-style:italic}
+.lista-limpa{list-style:none}
+.lista-limpa li{padding:6px 0 6px 26px;position:relative;font-size:.94rem}
+.lista-limpa li::before{content:"✔";position:absolute;left:0;color:var(--babacu);font-weight:800}
+.duas-colunas{columns:2;column-gap:34px}
+@media(max-width:720px){.duas-colunas{columns:1}}
+</style>
+</head>
+<body>
+<header class="topo">
+  <div class="topo-inner">
+    <a class="marca" href="#" onclick="irAba('inicio');return false;">
+      <div class="marca-simbolo"><span></span></div>
+      <div><b>PVCIST</b><small>Embrapa Maranhão</small></div>
+    </a>
+    <nav class="abas" role="tablist" aria-label="Seções da plataforma">
+      <button role="tab" data-aba="inicio" class="ativa" aria-selected="true">Visão geral</button>
+      <button role="tab" data-aba="inovacao" aria-selected="false">Como fazer inovação social</button>
+      <button role="tab" data-aba="seguranca" aria-selected="false">Segurança alimentar</button>
+      <button role="tab" data-aba="valoracao" aria-selected="false">Valoração comunitária</button>
+      <button role="tab" data-aba="passoapasso" aria-selected="false">Passo a passo · MA</button>
+    </nav>
+  </div>
+</header>
+
+<!-- ================= ABA 1 · VISÃO GERAL ================= -->
+<main>
+<div class="painel ativo" id="painel-inicio" role="tabpanel">
+
+  <div class="hero">
+    <div class="hero-azulejos" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <span class="eyebrow">Embrapa Maranhão · Proposta conceitual v1.0 · 2026</span>
+      <h1>Quando o território vira conhecimento, o conhecer gera <em>valoração</em> — e a valoração impulsiona a <em>inovação social</em>.</h1>
+      <p class="sub">A Plataforma de Valoração Comunitária e Inovação Social Territorial (PVCIST) é uma infraestrutura inteligente para gerar, organizar, valorizar e transformar o conhecimento sobre — e produzido por — comunidades rurais, povos tradicionais, agricultores familiares, instituições de pesquisa e gestores públicos do Maranhão.</p>
+      <div class="hero-acoes">
+        <a class="btn btn-sol" href="#" onclick="irAba('passoapasso');return false;">Ver o passo a passo interativo →</a>
+        <a class="btn btn-contorno" href="#" onclick="irAba('inovacao');return false;">Como fazer inovação social</a>
+      </div>
+      <div class="hero-stats">
+        <div><b>8</b><span>módulos integrados, do dado à decisão</span></div>
+        <div><b>12</b><span>dimensões de avaliação territorial</span></div>
+        <div><b>10+</b><span>índices sintéticos (ISA, IOC, IIR…)</span></div>
+        <div><b>1</b><span>indicador-síntese: o IVCT</span></div>
+      </div>
+    </div>
+  </div>
+
+  <section class="bloco">
+    <div class="container">
+      <div class="bloco-cab">
+        <span class="eyebrow">O contexto</span>
+        <h2>O território rural produz conhecimento. Mas ele não é visto, valorado ou reconhecido.</h2>
+        <p>Existe hoje uma fragmentação significativa das informações produzidas nos territórios rurais: dados sobre produção, aspectos socioeconômicos, infraestrutura, organização comunitária, demandas locais e ativos ambientais encontram-se dispersos, desatualizados ou inacessíveis.</p>
+      </div>
+      <div class="grade g4">
+        <div class="cartao"><div class="icone i-barro">🧩</div><span class="num">01</span><h3>Dados fragmentados</h3><p>Informações rurais dispersas entre IBGE, INPE, secretarias, universidades e comunidades — sem interoperabilidade.</p></div>
+        <div class="cartao"><div class="icone i-verde">🌿</div><span class="num">02</span><h3>Saberes invisíveis</h3><p>Conhecimento tradicional, cultura local e serviços ecossistêmicos raramente entram no cálculo de políticas públicas.</p></div>
+        <div class="cartao"><div class="icone i-sol">🍚</div><span class="num">03</span><h3>Insegurança alimentar</h3><p>A produção para autoconsumo e a diversidade alimentar não são medidas — e, sem medida, não recebem investimento.</p></div>
+        <div class="cartao"><div class="icone i-azul">📡</div><span class="num">04</span><h3>Diálogo intermitente</h3><p>Não há canal permanente entre comunidades, pesquisa e gestão pública para orientar decisões em tempo real.</p></div>
+      </div>
+      <div style="margin-top:22px">
+        <div class="faixa"><div class="icone">⚠️</div><p><b>Consequência:</b> ações públicas mal calibradas, investimentos que não chegam aos territórios mais vulneráveis e comunidades que continuam produzindo valor sem reconhecimento — um ciclo que a Embrapa Maranhão pode romper.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloco alt">
+    <div class="container">
+      <div class="bloco-cab">
+        <span class="eyebrow">A proposta</span>
+        <h2>Uma infraestrutura que transforma dados em valoração</h2>
+        <p>Um ecossistema colaborativo em que os diferentes atores compreendem, visualizam, produzem, compartilham e utilizam informações estratégicas do território — cruzando dados secundários e censitários com informações alimentadas continuamente pelos próprios atores locais, que recebem em contrapartida serviços inteligentes, recomendações técnicas, acesso a mercados e indicadores de desenvolvimento.</p>
+      </div>
+      <div class="grade g4">
+        <div class="cartao"><div class="icone i-verde">📱</div><h3>Ciência cidadã</h3><p>Coleta participativa via aplicativo e web, pelos próprios moradores dos territórios.</p></div>
+        <div class="cartao"><div class="icone i-azul">🤖</div><h3>Inteligência artificial</h3><p>Análises, diagnósticos, análises preditivas e recomendações técnicas geradas automaticamente.</p></div>
+        <div class="cartao"><div class="icone i-sol">🔗</div><h3>Integração de bases</h3><p>IBGE, INPE, MapBiomas, SEEG, ANA, INMET, Embrapa e dados locais dialogando na mesma camada.</p></div>
+        <div class="cartao"><div class="icone i-barro">🤝</div><h3>Governança participativa</h3><p>Canal permanente entre comunidades, pesquisadores e gestores públicos.</p></div>
+      </div>
+
+      <div class="bloco-cab" style="margin-top:44px">
+        <span class="eyebrow">Fundamentos</span>
+        <h2>Sete princípios orientadores</h2>
+      </div>
+      <div>
+        <span class="selo s-verde">Participação comunitária</span>
+        <span class="selo s-azul">Ciência aberta</span>
+        <span class="selo s-sol">Governança colaborativa</span>
+        <span class="selo s-barro">Transparência</span>
+        <span class="selo s-verde">Inovação social</span>
+        <span class="selo s-azul">Sustentabilidade</span>
+        <span class="selo s-sol">Valorização dos saberes locais</span>
+      </div>
+      <p style="margin-top:14px;color:var(--tinta-suave);max-width:74ch">Esses princípios asseguram que a plataforma não se limite ao armazenamento de informações, mas atue como instrumento permanente de fortalecimento das capacidades locais, da gestão do conhecimento e da construção coletiva de soluções. A proposta está alinhada às estratégias da Embrapa, aos <b>Objetivos de Desenvolvimento Sustentável (ODS)</b>, ao <b>Plano ABC+</b>, à <b>Agenda 2030</b> e às políticas nacionais de inovação social.</p>
+    </div>
+  </section>
+
+  <section class="bloco">
+    <div class="container">
+      <div class="bloco-cab">
+        <span class="eyebrow">Arquitetura</span>
+        <h2>Oito módulos integrados que atuam do dado à decisão</h2>
+        <p>Cada participante pode registrar dados de produção agropecuária, biodiversidade, recursos naturais, serviços ecossistêmicos, cultura local, inovação, economia, infraestrutura e indicadores sociais — que alimentam modelos de IA e ferramentas de Business Intelligence.</p>
+      </div>
+      <div class="modulos-fluxo">
+        <div class="mod-cartao"><span class="mod-n">MÓDULO 01</span><h3>Segurança e soberania alimentar</h3><p>Indicadores multidimensionais sobre disponibilidade, autoconsumo, diversidade alimentar e estado nutricional. Sintetizados no ISA.</p><a href="#" onclick="irAba('seguranca');return false;" style="font-size:.82rem;font-weight:700;color:var(--azulejo)">Explorar módulo →</a></div>
+        <div class="mod-cartao"><span class="mod-n">MÓDULO 02</span><h3>Coleta participativa</h3><p>Comunidades registram informações via app/web: produção agrícola, meliponicultura, apicultura, pesca, extrativismo, SAF, ILPF, carbono, biodiversidade, turismo rural e patrimônio cultural.</p></div>
+        <div class="mod-cartao"><span class="mod-n">MÓDULO 03</span><h3>Inteligência territorial</h3><p>Integração automática com bases oficiais — IBGE, INPE, MapBiomas, SEEG, Embrapa, ANA, INMET — para contextualizar resultados das tecnologias sociais.</p></div>
+        <div class="mod-cartao"><span class="mod-n">MÓDULO 04</span><h3>Visualizações</h3><p>Mapas, indicadores, séries históricas, diagnósticos, previsões, cenários futuros e a própria valoração da comunidade, em painéis interativos (BI / Power BI).</p></div>
+        <div class="mod-cartao nucleo"><span class="mod-n">MÓDULO 05 · NÚCLEO</span><h3>Valoração comunitária</h3><p>Ativos do território reconhecidos e quantificados: serviços ecossistêmicos, patrimônio cultural, produção sustentável, conhecimento tradicional e capital social.</p><a href="#" onclick="irAba('valoracao');return false;" style="font-size:.82rem;font-weight:700;color:var(--azulejo)">Explorar módulo →</a></div>
+        <div class="mod-cartao nucleo"><span class="mod-n">MÓDULO 06 · NÚCLEO</span><h3>Inovação social</h3><p>Núcleo metodológico: desafios territoriais, Living Labs, incubação de projetos, editais, inovação aberta e empreendedorismo rural.</p><a href="#" onclick="irAba('inovacao');return false;" style="font-size:.82rem;font-weight:700;color:var(--azulejo)">Explorar módulo →</a></div>
+        <div class="mod-cartao"><span class="mod-n">MÓDULO 07</span><h3>Mercado e oportunidades</h3><p>Marketplace territorial, certificações, rastreabilidade, crédito rural, carbono, PSA, investidores e compras públicas (PNAE, PAA). Ambiente de inteligência com análise FOFA/SWOT.</p></div>
+        <div class="mod-cartao"><span class="mod-n">MÓDULO 08</span><h3>Governança inteligente</h3><p>Painéis estratégicos para gestores públicos, cooperativas, associações, Embrapa, universidades, secretarias e financiadores.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloco alt">
+    <div class="container">
+      <div class="bloco-cab">
+        <span class="eyebrow">Embrapa Maranhão hoje</span>
+        <h2>Já temos as tecnologias. A plataforma amplifica o alcance.</h2>
+      </div>
+      <div class="grade g3">
+        <div class="cartao"><div class="icone i-verde">🌳</div><h3>SAF · Sistemas Agroflorestais</h3><p>Cultivo consorciado com árvores nativas — segurança alimentar, renda e conservação da biodiversidade.</p></div>
+        <div class="cartao"><div class="icone i-sol">🐟</div><h3>Sisteminha Embrapa</h3><p>Modelo compacto de produção integrada e diversificada — hortaliças, peixes, aves — voltado ao autoconsumo e à geração de renda familiar.</p></div>
+        <div class="cartao"><div class="icone i-barro">🌱</div><h3>RENIVA</h3><p>Rede de multiplicação de manivas-semente de mandioca com qualidade genética e sanitária — base alimentar de milhares de famílias no MA.</p></div>
+        <div class="cartao"><div class="icone i-verde">🐄</div><h3>ILPF</h3><p>Integração Lavoura-Pecuária-Floresta: cultivo, criação e árvores no mesmo espaço — produtividade e recuperação de solos degradados.</p></div>
+        <div class="cartao"><div class="icone i-sol">🥥</div><h3>Babaçu</h3><p>Extrativismo e agregação de valor aos produtos e subprodutos do babaçu — renda para quebradeiras de coco e comunidades tradicionais.</p></div>
+        <div class="cartao" style="background:var(--mata);border-color:var(--mata)"><h3 style="color:#fff">O papel ampliado da Embrapa MA</h3><p style="color:#D7E4DC">De unidade de pesquisa a arquiteta da inovação social territorial: curadoria científica, base tecnológica, Living Labs comunitários, interlocução institucional e referência nacional para replicação da PVCIST.</p></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= ABA 2 · INOVAÇÃO SOCIAL ================= -->
+<div class="painel" id="painel-inovacao" role="tabpanel">
+  <section class="bloco" style="padding-top:48px">
+    <div class="container">
+      <div class="bloco-cab">
+        <span class="eyebrow">Módulo 06 · Núcleo metodológico</span>
+        <h2>Como fazer inovação social</h2>
+        <p>Inovação social não é entregar um produto: é um processo coletivo de mudança. Há convergência na literatura quanto aos seus atributos — <b>participação, cocriação, coprodução do conhecimento, fortalecimento das capacidades coletivas, governança participativa e geração de valor social compartilhado</b> (Moulaert et al., 2013; Haxeltine et al., 2017; OECD, 2024).</p>
+      </div>
+
+      <div class="grade g3">
+        <div class="cartao"><div class="icone i-verde">🎯</div><h3>Direcionamento</h3><p>Enfrentamento de problemas coletivos, inclusão de grupos vulneráveis e contribuição para desafios estratégicos.</p></div>
+        <div class="cartao"><div class="icone i-sol">🫱🏽‍🫲🏾</div><h3>Apropriação coletiva do valor</h3><p>O valor gerado é distribuído e apropriado pelo grupo, não capturado por indivíduos ou intermediários.</p></div>
+        <div class="cartao"><div class="icone i-azul">🌱</div><h3>Origem endógena das demandas</h3><p>As demandas nascem da própria comunidade — não são impostas de fora para dentro.</p></div>
+        <div class="cartao"><div class="icone i-barro">📚</div><h3>Aprendizagem coletiva</h3><p>Fortalecimento contínuo de capacidades: aprender fazendo, junto, e registrar o que se aprende.</p></div>
+        <div class="cartao"><div class="icone i-verde">🗳️</div><h3>Governança participativa</h3><p>Decisões tomadas coletivamente, com transparência, horizontalidade e liderança compartilhada.</p></div>
+        <div class="cartao" style="background:var(--sol-claro);border-color:var(--sol)"><h3>Na visão da Embrapa</h3><p>A inovação social deve contribuir simultaneamente para a diversificação dos sistemas produtivos, circuitos curtos de comercialização, valorização da memória biocultural, inclusão socioprodutiva e desenvolvimento territorial sustentável (Amâncio, 2019; Muñoz & Muñoz, 2017).</p></div>
+      </div>
+      <p class="nota-fonte">Os cinco critérios acima são os orientadores propostos por Amâncio (2019) para caracterizar iniciativas de inovação social no âmbito da Embrapa.</p>
+    </div>
+  </section>
+
+  <section class="bloco alt">
+    <div class="container">
+      <div class="bloco-cab">
+        <span class="eyebrow">Modelo analítico I · Ex ante</span>
+        <h2>Condições estruturantes para o potencial de inovação social</h2>
+        <p>Antes de intervir, é preciso responder: <b>“quais características tornam um grupo social mais propenso ao sucesso em processos de inovação social?”</b>. O modelo ex ante avalia o grupo em sete eixos estruturantes.</p>
+      </div>
+
+      <div class="acordeao"><button aria-expanded="false"><span class="selo s-verde" style="min-width:52px;text-align:center">20 pts</span> 1 · Organização social <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="corpo"><div class="corpo-inner"><p>Capacidade do grupo de atuar coletivamente.</p>
+          <h4>Indicadores</h4><ul><li>Existência de associação ou cooperativa e tempo de funcionamento</li><li>Frequência das reuniões e participação dos membros</li><li>Confiança entre os participantes</li><li>Existência de lideranças reconhecidas</li><li>Resolução coletiva de conflitos e capacidade de mobilização</li></ul>
+          <h4>Conceitos relacionados</h4><p>Capital social, ação coletiva, governança comunitária, empowerment, redes sociais de laços fortes.</p></div></div></div>
+
+      <div class="acordeao"><button aria-expanded="false"><span class="selo s-azul" style="min-width:52px;text-align:center">15 pts</span> 2 · Institucionalidade <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="corpo"><div class="corpo-inner"><p>Não basta existir organização — é preciso que ela funcione institucionalmente (impessoalmente). Quanto mais institucionalizado o grupo, maior a capacidade de executar inovação de forma consistente, porque os processos não dependem de pessoas isoladas, mas da vontade institucionalizada do coletivo.</p>
+          <h4>Indicadores</h4><ul><li>Regras claras e estatuto ativo</li><li>Prestação de contas e transparência</li><li>Alternância de lideranças e baixa personalização das decisões</li><li>Registros administrativos e segurança jurídica</li></ul></div></div></div>
+
+      <div class="acordeao"><button aria-expanded="false"><span class="selo s-azul" style="min-width:52px;text-align:center">15 pts</span> 3 · Atuação política e capacidade de articulação <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="corpo"><div class="corpo-inner">
+          <h4>Indicadores</h4><ul><li>Participação em conselhos, fóruns e movimentos sociais</li><li>Relação com universidades e órgãos públicos</li><li>Projetos anteriores e redes de cooperação</li><li>Acesso a editais</li></ul>
+          <h4>Conceitos relacionados</h4><p>Network capacity, institutional embeddedness, social connectedness, redes sociais de laços fracos.</p></div></div></div>
+
+      <div class="acordeao"><button aria-expanded="false"><span class="selo s-azul" style="min-width:52px;text-align:center">15 pts</span> 4 · Base produtiva (meios de produção) <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="corpo"><div class="corpo-inner"><p>Pouca inovação prospera onde sequer existe capacidade mínima de produzir. Este eixo representa a capacidade operacional.</p>
+          <h4>Indicadores</h4><ul><li>Propriedade da terra, máquinas e infraestrutura</li><li>Assistência técnica, energia, internet e transporte</li><li>Armazenamento, matéria-prima e mercado existente</li></ul></div></div></div>
+
+      <div class="acordeao"><button aria-expanded="false"><span class="selo s-azul" style="min-width:52px;text-align:center">15 pts</span> 5 · Capital humano e capacidades locais <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="corpo"><div class="corpo-inner"><p>Características que dão suporte aos processos de inovação social.</p>
+          <h4>Indicadores</h4><ul><li>Escolaridade e alfabetização digital</li><li>Lideranças jovens e lideranças femininas</li><li>Experiência empresarial e em projetos</li><li>Conhecimento tradicional, capacidade de aprender e de planejar</li></ul></div></div></div>
+
+      <div class="acordeao"><button aria-expanded="false"><span class="selo s-sol" style="min-width:52px;text-align:center">10 pts</span> 6 · Cultura da cooperação e da inovação <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="corpo"><div class="corpo-inner"><p>Nem toda comunidade organizada é inovadora: grupos muito organizados, com laços fortes muito desenvolvidos, podem cristalizar valores e resistir à mudança.</p>
+          <h4>Indicadores</h4><ul><li>Abertura para experimentar e aceitação do erro</li><li>Histórico de inovação e troca de experiências</li><li>Confiança em parceiros externos e disposição para aprender</li><li>Capacidade de adaptar tecnologias e valorização do conhecimento</li></ul></div></div></div>
+
+      <div class="acordeao"><button aria-expanded="false"><span class="selo s-sol" style="min-width:52px;text-align:center">10 pts</span> 7 · Ambiente institucional externo <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="corpo"><div class="corpo-inner"><p>Há grupos excelentes inseridos em contextos completamente desfavoráveis — o ecossistema de inserção pode ser decisivo. Envolve as redes de laços fracos dos sujeitos.</p>
+          <h4>Indicadores</h4><ul><li>Presença de políticas públicas e acesso ao crédito</li><li>ATER, universidades, Embrapa, SEBRAE</li><li>Compradores, mercados e logística</li><li>Internet e leis favoráveis</li></ul></div></div></div>
+
+      <!-- Simulador ex ante -->
+      <div class="simulador" style="margin-top:34px" id="sim-exante">
+        <span class="eyebrow">Simulador interativo</span>
+        <h3>Índice de Potencial de Inovação Social (ex ante)</h3>
+        <p style="font-size:.9rem;color:var(--tinta-suave)">Atribua uma nota de 0 a 10 para cada eixo estruturante da comunidade avaliada. O índice pondera os eixos pelos pesos do modelo.</p>
+        <div class="sim-grade">
+          <div id="controles-exante"></div>
+          <div class="resultado-caixa">
+            <span class="eyebrow" style="justify-content:center">Resultado</span>
+            <div class="resultado-num" id="res-exante">0,0</div>
+            <div style="font-size:.78rem;color:var(--tinta-suave)">de 10 pontos</div>
+            <div class="resultado-classe" id="classe-exante">—</div>
+            <p class="resultado-desc" id="desc-exante"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloco">
+    <div class="container">
+      <div class="bloco-cab">
+        <span class="eyebrow">Modelo analítico II · Durante e ex post</span>
+        <h2>Avaliação do processo de inovação social</h2>
+        <p>Agora não se avalia mais o grupo — avalia-se <b>o processo</b>. Lembrando: os resultados principais da inovação social não são os produtos, mas os processos de empoderamento e mudança social.</p>
+      </div>
+      <div class="grade g3">
+        <div class="cartao" style="border-top:5px solid var(--babacu)"><span class="num">DURANTE</span><h3>1 · Qualidade do processo</h3><p>O processo realmente ocorreu segundo os princípios da inovação social?</p><ul class="lista-limpa" style="margin-top:10px;font-size:.86rem"><li>Participação real e cocriação</li><li>Coprodução e aprendizagem coletiva</li><li>Confiança e horizontalidade</li><li>Liderança compartilhada</li><li>Governança participativa e transparência</li><li>Tomada coletiva de decisões</li><li>Circulação do conhecimento</li></ul></div>
+        <div class="cartao" style="border-top:5px solid var(--sol)"><span class="num">EX POST</span><h3>2 · Resultados da inovação social</h3><p>Quais mudanças sociais foram produzidas?</p><ul class="lista-limpa" style="margin-top:10px;font-size:.86rem"><li>Novas organizações, redes e empreendimentos</li><li>Maior autonomia, capacidades e conhecimentos</li><li>Aumento de renda e fortalecimento institucional</li><li>Novas políticas locais</li><li>Maior participação feminina e dos jovens</li><li>Melhor distribuição do valor</li><li>Redução da dependência de intermediários</li></ul></div>
+        <div class="cartao" style="border-top:5px solid var(--barro)"><span class="num">TRANSFORMAÇÃO</span><h3>3 · Inovação transformadora</h3><p>O sistema mudou? Se o processo modifica permanentemente as estruturas sociais, trata-se de inovação transformadora.</p><ul class="lista-limpa" style="margin-top:10px;font-size:.86rem"><li>Mudança institucional e das relações de poder</li><li>Mudança da cadeia produtiva e na distribuição do valor</li><li>Novas políticas públicas e legislações</li><li>Novas formas de governança e novos mercados</li><li>Replicação espontânea</li><li>Mudança cultural e transição do sistema produtivo</li></ul></div>
+      </div>
+      <div style="margin-top:22px">
+        <div class="faixa"><div class="icone">🔁</div><p><b>Dois modelos, um ciclo:</b> a avaliação <b>ex ante</b> orienta onde e como começar; a avaliação <b>de processo e resultados</b> orienta como corrigir a rota e quando escalar. Na PVCIST, indicadores próprios da comunidade são construídos coletivamente e <b>triangulados com indicadores secundários</b> (IBGE, INPE, MapBiomas etc.).</p></div>
+      </div>
+      <p class="nota-fonte">Fontes: Moulaert et al. (2013); Haxeltine et al. (2017); OECD (2024); Amâncio (2019); Muñoz & Muñoz (2017).</p>
+    </div>
+  </section>
+</div>
+
+<!-- ================= ABA 3 · SEGURANÇA ALIMENTAR ================= -->
+<div class="painel" id="painel-seguranca" role="tabpanel">
+  <section class="bloco" style="padding-top:48px">
+    <div class="container">
+      <div class="bloco-cab">
+        <span class="eyebrow">Módulo 01 · Eixo estruturante</span>
+        <h2>Segurança alimentar como medida do território</h2>
+        <p>A segurança alimentar é uma das dimensões estratégicas para avaliação das tecnologias sociais e do desenvolvimento territorial. Sua mensuração permite compreender não apenas o <b>acesso</b> aos alimentos, mas também sua <b>disponibilidade, diversidade, estabilidade</b> e contribuição para a qualidade de vida das famílias. A metodologia adota abordagem <b>multidimensional</b>, combinando informações coletadas diretamente nas comunidades com indicadores oficiais — permitindo análises comparáveis ao longo do tempo, sintetizadas no <b>Índice de Segurança Alimentar (ISA)</b>.</p>
+      </div>
+
+      <div class="acordeao aberto"><button aria-expanded="true"><span style="font-size:1.4rem">🧺</span> Dimensão 1 · Disponibilidade de alimentos <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="corpo" style="max-height:none"><div class="corpo-inner"><p>Avalia a capacidade das famílias de manter acesso contínuo aos alimentos necessários para uma alimentação adequada.</p>
+          <h4>Variáveis</h4><ul><li>Quantidade de alimentos disponíveis no domicílio (kg ou porções/pessoa/dia)</li><li>Fontes de acesso ao alimento: compra, produção própria, doação, troca, programas sociais</li><li>Frequência de abastecimento/reposição</li><li>Distância e frequência de acesso a mercados, feiras ou pontos de venda</li><li>Sazonalidade (safra × entressafra)</li><li>Existência de estoque domiciliar (reserva de alimentos básicos)</li></ul>
+          <h4>Como mensurar</h4><ul><li>Inventário domiciliar de alimentos (lista de itens presentes em um dado momento)</li><li>Recordatório de aquisição alimentar (últimos 7 ou 30 dias)</li><li>Adaptação do módulo de aquisição alimentar da POF/IBGE</li><li>Questionário sobre acesso a pontos de venda (distância, meio de transporte, frequência)</li></ul></div></div></div>
+
+      <div class="acordeao"><button aria-expanded="false"><span style="font-size:1.4rem">🌽</span> Dimensão 2 · Produção para autoconsumo <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="corpo"><div class="corpo-inner"><p>Mensura a contribuição da produção própria para a segurança alimentar das famílias, avaliando seu grau de autonomia em relação ao abastecimento alimentar.</p>
+          <h4>Variáveis</h4><ul><li>Área destinada ao cultivo/criação para consumo próprio (m² ou hectares)</li><li>Número de espécies vegetais/animais produzidas para autoconsumo</li><li>Quantidade produzida por tipo de alimento (kg/mês ou kg/ciclo produtivo)</li><li>Percentual da produção destinado ao consumo familiar (vs. venda)</li><li>Contribuição da produção própria na alimentação total da família (%)</li></ul>
+          <h4>Como mensurar</h4><ul><li>Questionário estruturado sobre produção agrícola familiar (tipo, quantidade, destino)</li><li>Diário/registro de produção e colheita (período determinado, ex.: 30 dias)</li><li>Pesagem ou medidas caseiras padronizadas</li><li><b>Índice de autossuficiência alimentar</b> = (quantidade produzida e consumida ÷ consumo total do domicílio) × 100</li></ul></div></div></div>
+
+      <div class="acordeao"><button aria-expanded="false"><span style="font-size:1.4rem">🥗</span> Dimensão 3 · Diversidade alimentar <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="corpo"><div class="corpo-inner"><p>Importante indicador da qualidade da dieta, refletindo a variedade de alimentos consumidos regularmente pelas famílias.</p>
+          <h4>Variáveis</h4><ul><li>Número de grupos alimentares consumidos em um período de referência</li><li>Frequência semanal de consumo por grupo alimentar</li><li>Variedade de itens dentro de cada grupo alimentar</li></ul>
+          <h4>Como mensurar</h4><ul><li><b>HDDS</b> (Household Dietary Diversity Score – FAO): recordatório de 24h com 12 grupos alimentares, escore de 0 a 12</li><li>Questionário de Frequência Alimentar (QFA)</li><li>Recordatório alimentar de 24 horas (múltiplos dias para maior precisão)</li></ul></div></div></div>
+
+      <div class="acordeao"><button aria-expanded="false"><span style="font-size:1.4rem">⚕️</span> Dimensão 4 · Estado nutricional <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="corpo"><div class="corpo-inner"><p>Avalia as condições nutricionais dos indivíduos, permitindo identificar situações de desnutrição, excesso de peso e outros fatores relacionados à saúde da população.</p>
+          <h4>Variáveis</h4><ul><li>Peso corporal e estatura; Índice de Massa Corporal (IMC)</li><li>Para crianças: peso/idade, altura/idade, peso/altura (ou IMC/idade)</li><li>Circunferência da cintura (risco cardiometabólico em adultos)</li></ul>
+          <h4>Como mensurar</h4><ul><li>Antropometria com balança e estadiômetro/antropômetro calibrados</li><li>Classificação segundo curvas e pontos de corte da OMS</li><li>Sistema <b>SISVAN</b> (padrão do Ministério da Saúde no Brasil)</li></ul></div></div></div>
+
+      <div class="bloco-cab" style="margin-top:44px">
+        <span class="eyebrow">Da medida à ação</span>
+        <h2>Por que medir segurança alimentar muda o território</h2>
+      </div>
+      <div class="cadeia">
+        <div class="elo"><h4>Medir localmente</h4><p>Retrato contínuo e sensível de cada comunidade — não estatística agregada.</p></div>
+        <div class="elo"><h4>Comparar no tempo</h4><p>Séries históricas do ISA mostram efeito de safras, políticas e tecnologias sociais.</p></div>
+        <div class="elo"><h4>Priorizar territórios</h4><p>Comunidades com ISA crítico entram no radar de investimento e assistência.</p></div>
+        <div class="elo"><h4>Ativar tecnologias</h4><p>Sisteminha, SAF, RENIVA e quintais produtivos direcionados a quem mais precisa.</p></div>
+        <div class="elo"><h4>Monitorar impacto</h4><p>O ISA volta a ser medido e evidencia a evolução — fechando o ciclo da inovação social.</p></div>
+      </div>
+
+      <div style="margin-top:26px">
+        <div class="faixa"><div class="icone">🌾</div><p><b>Soberania alimentar:</b> mais do que garantir acesso, a plataforma valoriza a autonomia — quintais, roças, criações de subsistência, alimentos nativos e o conhecimento tradicional que sustenta a diversidade alimentar dos territórios maranhenses.</p></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= ABA 4 · VALORAÇÃO COMUNITÁRIA ================= -->
+<div class="painel" id="painel-valoracao" role="tabpanel">
+  <section class="bloco" style="padding-top:48px">
+    <div class="container">
+      <div class="bloco-cab">
+        <span class="eyebrow">Módulo 05 · Núcleo</span>
+        <h2>Valoração comunitária: o território como ativo</h2>
+        <p>Os ativos do território passam a ser <b>reconhecidos e quantificados</b>: serviços ecossistêmicos, ativos ambientais, patrimônio cultural, produção sustentável, conhecimento tradicional e capital social. A valoração subsidia ações públicas, certificações, Pagamento por Serviços Ambientais (PSA) e investimentos.</p>
+      </div>
+
+      <h3 style="margin-bottom:14px">Quatro tipos de valoração</h3>
+      <div class="val-tipos">
+        <div class="val-cartao v-obj"><h3>📏 Valoração objetiva (medida)</h3><p class="def">Dados quantitativos e verificáveis.</p><div class="ex">Renda, produção, biodiversidade, produtividade, acesso à internet, organizações existentes, emissões, escolaridade.</div></div>
+        <div class="val-cartao v-per"><h3>💛 Valoração percebida (subjetiva)</h3><p class="def">Como os moradores percebem sua própria comunidade.</p><div class="ex" style="background:rgba(0,0,0,.1)">Qualidade de vida, confiança, orgulho local, percepção de oportunidades, satisfação, pertencimento.</div></div>
+        <div class="val-cartao v-soc"><h3>🌐 Valoração social (externa)</h3><p class="def">Como outros atores reconhecem a comunidade.</p><div class="ex">Reconhecimento institucional, participação em redes, premiações, reputação, parcerias, mercado.</div></div>
+        <div class="val-cartao v-pot"><h3>🚀 Valoração potencial (prospectiva)</h3><p class="def">Capacidade futura de gerar inovação e desenvolvimento.</p><div class="ex">Capital social, governança, liderança, aprendizagem, infraestrutura, capacidade inovativa.</div></div>
+      </div>
+
+      <div class="bloco-cab" style="margin-top:48px">
+        <span class="eyebrow">Estrutura multidimensional</span>
+        <h2>Doze dimensões de avaliação territorial</h2>
+        <p>Uma visão sistêmica dos territórios que possibilita comparações entre comunidades, projetos e períodos de execução.</p>
+      </div>
+      <div class="tabela-envolucro">
+        <table class="dim">
+          <thead><tr><th style="width:220px">Dimensão</th><th>Exemplos de indicadores</th></tr></thead>
+          <tbody>
+            <tr><td>🤝 Capital Social</td><td>Participação em associações e cooperativas, confiança comunitária, ações coletivas, voluntariado, lideranças locais</td></tr>
+            <tr><td>🎓 Capital Humano</td><td>Escolaridade, capacitação técnica, alfabetização (inclusive digital), acesso à assistência técnica, qualificação profissional</td></tr>
+            <tr><td>💰 Capital Econômico</td><td>Renda média, diversidade de atividades econômicas, produtividade, acesso ao crédito, comercialização, geração de empregos</td></tr>
+            <tr><td>🌳 Capital Ambiental</td><td>Cobertura vegetal, conservação de APP/RL, estoque de carbono, biodiversidade, recuperação de áreas degradadas, qualidade da água</td></tr>
+            <tr><td>🚜 Capital Produtivo</td><td>Diversidade produtiva, adoção de tecnologias da Embrapa (ILPF, SAF, Sisteminha, RENIVA etc.), mecanização, irrigação</td></tr>
+            <tr><td>🛣️ Infraestrutura</td><td>Energia elétrica, internet, estradas, saneamento, abastecimento de água, transporte</td></tr>
+            <tr><td>🍚 Segurança Alimentar</td><td>Disponibilidade de alimentos, diversidade alimentar, produção para autoconsumo, estado nutricional</td></tr>
+            <tr><td>🏛️ Governança Territorial</td><td>Participação em conselhos, projetos ativos, acesso a políticas públicas, transparência, organização comunitária</td></tr>
+            <tr><td>💡 Inovação</td><td>Uso de aplicativos, sensores, IA, agricultura digital, registro de dados na plataforma</td></tr>
+            <tr><td>🐝 Serviços Ecossistêmicos</td><td>Sequestro de carbono, polinização, conservação do solo, regulação hídrica, manutenção da biodiversidade</td></tr>
+            <tr><td>🌦️ Resiliência Climática</td><td>Exposição à seca, capacidade de adaptação, sistemas integrados, diversificação produtiva</td></tr>
+            <tr><td>🏡 Qualidade de Vida</td><td>Saúde, educação, percepção de bem-estar, permanência dos jovens, igualdade de gênero</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bloco-cab" style="margin-top:48px">
+        <span class="eyebrow">Índices sintéticos</span>
+        <h2>Dez índices estratégicos da comunidade</h2>
+        <p>Indicadores próprios, construídos coletivamente e triangulados com indicadores secundários, para acompanhar a evolução das comunidades e comparar tecnologias sociais.</p>
+      </div>
+      <div class="grade g4" style="gap:12px">
+        <div class="cartao" style="padding:16px"><b>IOC</b><p>Índice de Organização Comunitária</p></div>
+        <div class="cartao" style="padding:16px"><b>ICN</b><p>Índice de Capital Natural</p></div>
+        <div class="cartao" style="padding:16px"><b>ISA</b><p>Índice de Segurança Alimentar</p></div>
+        <div class="cartao" style="padding:16px"><b>IDP</b><p>Índice de Diversificação Produtiva</p></div>
+        <div class="cartao" style="padding:16px"><b>IIR</b><p>Índice de Inovação Rural</p></div>
+        <div class="cartao" style="padding:16px"><b>IID</b><p>Índice de Inclusão Digital</p></div>
+        <div class="cartao" style="padding:16px"><b>ISE</b><p>Índice de Serviços Ecossistêmicos</p></div>
+        <div class="cartao" style="padding:16px"><b>IGL</b><p>Índice de Governança Local</p></div>
+        <div class="cartao" style="padding:16px"><b>ISC</b><p>Índice de Sustentabilidade Comunitária</p></div>
+        <div class="cartao" style="padding:16px"><b>IPE</b><p>Índice de Potencial Econômico</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloco alt">
+    <div class="container">
+      <div class="bloco-cab">
+        <span class="eyebrow">Indicador-síntese</span>
+        <h2>IVCT — Índice de Valoração Comunitária Territorial</h2>
+        <p>Um indicador que traduz o território em um número comparável, sem perder a dimensão qualitativa. Combina oito capitais em uma equação transparente:</p>
+        <p style="font-family:var(--fonte-display);font-weight:700;background:var(--mata);color:var(--sol);padding:14px 18px;border-radius:12px;margin-top:12px;font-size:clamp(.8rem,1.9vw,1.05rem);overflow-x:auto">IVCT = 0,20·CE + 0,15·CS + 0,15·CH + 0,15·CA + 0,10·GI + 0,10·IQV + 0,10·IN + 0,05·RC</p>
+      </div>
+
+      <div class="simulador" id="sim-ivct">
+        <span class="eyebrow">Simulador interativo</span>
+        <h3>Calcule o IVCT de uma comunidade</h3>
+        <p style="font-size:.9rem;color:var(--tinta-suave)">Atribua uma nota de 0 a 10 para cada capital. O índice é calculado em tempo real com os pesos oficiais da fórmula.</p>
+        <div class="sim-grade">
+          <div id="controles-ivct"></div>
+          <div class="resultado-caixa">
+            <span class="eyebrow" style="justify-content:center">IVCT da comunidade</span>
+            <div class="resultado-num" id="res-ivct">0,0</div>
+            <div style="font-size:.78rem;color:var(--tinta-suave)">de 10 pontos</div>
+            <div class="resultado-classe" id="classe-ivct">—</div>
+            <p class="resultado-desc" id="desc-ivct"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bloco-cab" style="margin-top:48px">
+        <span class="eyebrow">Geração de valor</span>
+        <h2>Do saber ao ativo: como o território vira valor econômico</h2>
+      </div>
+      <div class="cadeia">
+        <div class="elo"><h4>Ativos do território</h4><p>Serviços ecossistêmicos, conhecimento tradicional, capital social, biodiversidade nativa.</p></div>
+        <div class="elo"><h4>Mensuração pelo IVCT</h4><p>Quantificação e reconhecimento formal desses ativos, com dados verificáveis e georreferenciados.</p></div>
+        <div class="elo"><h4>Conversão em ativo</h4><p>Certificações de origem, rastreabilidade, selos de bioeconomia e reconhecimento formal.</p></div>
+        <div class="elo"><h4>Renda e política pública</h4><p>PSA, créditos de carbono, compras públicas (PNAE/PAA), financiamento territorial.</p></div>
+      </div>
+
+      <div class="grade g3" style="margin-top:22px">
+        <div class="cartao"><div class="icone i-verde">💧</div><h3>Pagamento por Serviços Ambientais</h3><p>Comunidades que preservam biodiversidade e recursos hídricos passam a ser remuneradas por isso — com base em dados verificáveis pela plataforma.</p></div>
+        <div class="cartao"><div class="icone i-sol">🥥</div><h3>Créditos de carbono e bioeconomia</h3><p>Sistemas agroflorestais, extrativismo do babaçu e agricultura de baixo carbono ganham escala pela mensuração e certificação territorial.</p></div>
+        <div class="cartao"><div class="icone i-azul">🏪</div><h3>Compras públicas e mercados</h3><p>PNAE, PAA, feiras e cadeias curtas alimentadas por produção rastreada, com origem e valor social documentados.</p></div>
+      </div>
+
+      <div class="bloco-cab" style="margin-top:44px">
+        <span class="eyebrow">Para a tomada de decisão</span>
+        <h2>Indicadores de valor estratégico do território</h2>
+      </div>
+      <ul class="lista-limpa duas-colunas">
+        <li>Potencial de geração de renda</li>
+        <li>Potencial de geração de empregos</li>
+        <li>Potencial de redução de emissões de GEE</li>
+        <li>Potencial de geração de créditos de carbono</li>
+        <li>Potencial para bioeconomia</li>
+        <li>Potencial para ecoturismo</li>
+        <li>Potencial para agroindustrialização</li>
+        <li>Potencial para pagamento por serviços ambientais (PSA)</li>
+        <li>Potencial de atração de investimentos públicos e privados</li>
+        <li>Potencial para captação de recursos em editais e fomento</li>
+        <li>Potencial para inovação tecnológica</li>
+        <li>Potencial para difusão e escalonamento de tecnologias sociais</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<!-- ================= ABA 5 · PASSO A PASSO ================= -->
+<div class="painel" id="painel-passoapasso" role="tabpanel">
+  <section class="bloco" style="padding-top:48px">
+    <div class="container">
+      <div class="bloco-cab">
+        <span class="eyebrow">Infográfico interativo</span>
+        <h2>Passo a passo: como fazer inovação social no Maranhão</h2>
+        <p>Sete etapas, um ciclo contínuo. Clique em cada etapa da trilha (ou use as setas do teclado) para explorar atividades, ferramentas, indicadores e resultados esperados. Ao final, o monitoramento contínuo devolve o processo ao início — porque inovação social não termina: <b>se renova</b>.</p>
+      </div>
+
+      <div class="jornada">
+        <div class="trilha" id="trilha" role="tablist" aria-label="Etapas da inovação social"></div>
+        <div class="ciclo-aviso"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 12a9 9 0 1 1-2.6-6.3M21 3v6h-6"/></svg> Ciclo contínuo: a etapa 7 realimenta a etapa 1</div>
+        <div class="barra-progresso"><i id="progresso" style="width:14.3%"></i></div>
+      </div>
+
+      <div class="detalhe-etapa" id="detalhe-etapa" aria-live="polite"></div>
+
+      <div class="nav-etapas">
+        <button id="btn-ant" onclick="mudarEtapa(-1)">← Etapa anterior</button>
+        <button id="btn-prox" onclick="mudarEtapa(1)">Próxima etapa →</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloco alt">
+    <div class="container">
+      <div class="bloco-cab">
+        <span class="eyebrow">Síntese do ciclo</span>
+        <h2>Regras de ouro para a jornada</h2>
+      </div>
+      <div class="grade g3">
+        <div class="cartao"><div class="icone i-verde">👂</div><h3>Comece pela escuta</h3><p>A demanda deve ter origem endógena. Nenhuma etapa avança sem legitimação da comunidade.</p></div>
+        <div class="cartao"><div class="icone i-sol">🧪</div><h3>Erre pequeno, aprenda rápido</h3><p>Protótipos em escala reduzida (Living Labs) permitem testar, ajustar e só então escalar.</p></div>
+        <div class="cartao"><div class="icone i-azul">📊</div><h3>Meça o que importa</h3><p>Indicadores próprios da comunidade, triangulados com bases oficiais, antes, durante e depois.</p></div>
+        <div class="cartao"><div class="icone i-barro">🎓</div><h3>Transfira a capacidade</h3><p>O sucesso é a comunidade sustentar a inovação sem depender da presença permanente da Embrapa.</p></div>
+        <div class="cartao"><div class="icone i-verde">🔁</div><h3>Nunca feche o ciclo</h3><p>O monitoramento contínuo detecta novas dificuldades e abre novas iterações de inovação social.</p></div>
+        <div class="cartao"><div class="icone i-sol">⚖️</div><h3>Valor compartilhado</h3><p>Apropriação coletiva do valor gerado: renda, conhecimento e poder de decisão distribuídos.</p></div>
+      </div>
+    </div>
+  </section>
+</div>
+</main>
+
+<footer>
+  <div class="rodape-inner">
+    <div>
+      <h4>PVCIST · Embrapa Maranhão</h4>
+      <p>Plataforma/Modelo de Valoração Comunitária e Inovação Social Territorial. Versão 1.0 (Conceitual) · Apresentação para validação institucional e tomada de decisão · 2026.</p>
+    </div>
+    <div>
+      <h4>Explorar</h4>
+      <ul>
+        <li><a href="#" style="color:inherit" onclick="irAba('inicio');return false;">Visão geral e módulos</a></li>
+        <li><a href="#" style="color:inherit" onclick="irAba('inovacao');return false;">Como fazer inovação social</a></li>
+        <li><a href="#" style="color:inherit" onclick="irAba('seguranca');return false;">Segurança alimentar</a></li>
+        <li><a href="#" style="color:inherit" onclick="irAba('valoracao');return false;">Valoração e IVCT</a></li>
+        <li><a href="#" style="color:inherit" onclick="irAba('passoapasso');return false;">Passo a passo · MA</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Alinhamento estratégico</h4>
+      <span class="chip-ods">ODS · Agenda 2030</span>
+      <span class="chip-ods">Plano ABC+</span>
+      <span class="chip-ods">Estratégias Embrapa</span>
+      <span class="chip-ods">Políticas de inovação social</span>
+      <p style="margin-top:10px;font-size:.8rem">Próximos passos: definição de território-piloto, formalização de parcerias e elaboração da Versão 2.0 (executiva).</p>
+    </div>
+  </div>
+  <div class="base">Plataforma conceitual demonstrativa · Conteúdo baseado na proposta PVCIST (Embrapa Maranhão) e em Amâncio (2019); Muñoz &amp; Muñoz (2017); Moulaert et al. (2013); Haxeltine et al. (2017); OECD (2024).</div>
+</footer>
+
+<script>
+/* ================= Navegação por abas ================= */
+const botoesAba = document.querySelectorAll('nav.abas button');
+function irAba(id){
+  botoesAba.forEach(b=>{
+    const ativa = b.dataset.aba===id;
+    b.classList.toggle('ativa',ativa);
+    b.setAttribute('aria-selected',ativa);
+  });
+  document.querySelectorAll('.painel').forEach(p=>p.classList.toggle('ativo',p.id==='painel-'+id));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+botoesAba.forEach(b=>b.addEventListener('click',()=>irAba(b.dataset.aba)));
+
+/* ================= Acordeões ================= */
+document.querySelectorAll('.acordeao > button').forEach(bt=>{
+  const ac = bt.parentElement, corpo = ac.querySelector('.corpo');
+  if(ac.classList.contains('aberto')) corpo.style.maxHeight = 'none';
+  bt.addEventListener('click',()=>{
+    const abrindo = !ac.classList.contains('aberto');
+    ac.classList.toggle('aberto',abrindo);
+    bt.setAttribute('aria-expanded',abrindo);
+    if(abrindo){
+      corpo.style.maxHeight = corpo.scrollHeight+'px';
+      corpo.addEventListener('transitionend',()=>{ if(ac.classList.contains('aberto')) corpo.style.maxHeight='none'; },{once:true});
+    } else {
+      corpo.style.maxHeight = corpo.scrollHeight+'px';
+      void corpo.offsetHeight; /* força reflow para animar a partir da altura atual */
+      corpo.style.maxHeight = '0px';
+    }
+  });
+});
+
+/* ================= Simuladores (sliders ponderados) ================= */
+function criarSimulador(alvo, itens, saidaNum, saidaClasse, saidaDesc, interpretar){
+  const cont = document.getElementById(alvo);
+  const valores = itens.map(()=>5);
+  itens.forEach((it,i)=>{
+    const div = document.createElement('div');
+    div.className='controle';
+    div.innerHTML = `<div class="rotulo"><label for="${alvo}-${i}">${it.nome} <span class="peso">· peso ${it.peso}%</span></label><output id="${alvo}-out-${i}">5</output></div>
+      <input type="range" id="${alvo}-${i}" min="0" max="10" step="1" value="5" aria-label="${it.nome}">`;
+    cont.appendChild(div);
+    div.querySelector('input').addEventListener('input',e=>{
+      valores[i]=+e.target.value;
+      document.getElementById(`${alvo}-out-${i}`).textContent=e.target.value;
+      calc();
+    });
+  });
+  function calc(){
+    const total = itens.reduce((s,it,i)=>s+valores[i]*it.peso/100,0);
+    document.getElementById(saidaNum).textContent = total.toFixed(1).replace('.',',');
+    const [rotulo,cor,fundo,texto] = interpretar(total);
+    const el = document.getElementById(saidaClasse);
+    el.textContent = rotulo; el.style.background=fundo; el.style.color=cor;
+    document.getElementById(saidaDesc).textContent = texto;
+  }
+  calc();
+}
+
+criarSimulador('controles-exante',[
+  {nome:'Organização social',peso:20},
+  {nome:'Institucionalidade',peso:15},
+  {nome:'Articulação política',peso:15},
+  {nome:'Base produtiva',peso:15},
+  {nome:'Capital humano',peso:15},
+  {nome:'Cultura da cooperação',peso:10},
+  {nome:'Ambiente institucional',peso:10},
+],'res-exante','classe-exante','desc-exante',(t)=>{
+  if(t>=7.5) return ['Alto potencial','#123B33','#DCEDE2','Índices altos indicam grupo com fortes condições estruturantes: priorize a iniciativa e avance para a cocriação e prototipagem.'];
+  if(t>=5) return ['Potencial moderado','#8a6410','#FBF0D6','Há base para inovar, mas eixos frágeis merecem fortalecimento prévio (ex.: formalização, articulação em redes, infraestrutura mínima).'];
+  return ['Potencial a construir','#B4552D','#F6E4DA','Recomenda-se etapa preparatória: fortalecer organização social, institucionalidade e capacidades locais antes de implantar protótipos.'];
+});
+
+criarSimulador('controles-ivct',[
+  {nome:'CE · Capital Econômico',peso:20},
+  {nome:'CS · Capital Social',peso:15},
+  {nome:'CH · Capital Humano',peso:15},
+  {nome:'CA · Capital Ambiental',peso:15},
+  {nome:'GI · Governança Institucional',peso:10},
+  {nome:'IQV · Qualidade de Vida',peso:10},
+  {nome:'IN · Inovação',peso:10},
+  {nome:'RC · Resiliência Climática',peso:5},
+],'res-ivct','classe-ivct','desc-ivct',(t)=>{
+  if(t>=7.5) return ['Valoração elevada','#123B33','#DCEDE2','Território com alto valor estratégico: apto a certificações, PSA, créditos de carbono e atração de investimentos.'];
+  if(t>=5) return ['Valoração intermediária','#8a6410','#FBF0D6','Território em desenvolvimento: os capitais com menor nota indicam onde direcionar tecnologias sociais e políticas públicas.'];
+  return ['Valoração inicial','#B4552D','#F6E4DA','Território prioritário para intervenção: alta relevância para investimentos públicos, segurança alimentar e inclusão socioprodutiva.'];
+});
+
+/* ================= Infográfico: dados das 7 etapas ================= */
+const etapas = [
+ {icone:'👂',titulo:'Compreender o contexto e as necessidades',fase:'Etapa 1 · Diagnóstico participativo',
+  resumo:'Tudo começa pela escuta. A Embrapa e os parceiros vão até a comunidade para compreender seu contexto histórico, cultural, produtivo e social — e identificar, junto com os moradores, as necessidades reais do território. A demanda deve ter origem endógena: nasce da comunidade, não é imposta.',
+  blocos:[
+   {t:'🛠️ Como fazer',l:['Diagnóstico Rural Participativo (DRP): oficinas, caminhadas transversais, mapas falados','Entrevistas e rodas de conversa com famílias, lideranças, jovens e mulheres','Mapeamento de atores: associações, cooperativas, escolas, igrejas, ATER, prefeitura','Coleta participativa de dados no Módulo 2 da plataforma (produção, cultura, infraestrutura)','Cruzamento com bases oficiais: IBGE, INPE, MapBiomas, SEEG, ANA, INMET']},
+   {t:'📊 O que medir',l:['Índice de Segurança Alimentar (ISA) e suas 4 dimensões','Avaliação ex ante: os 7 eixos do potencial de inovação social','Doze dimensões territoriais (capitais social, humano, econômico, ambiental…)','IVCT inicial — a linha de base da comunidade']},
+   {t:'🎁 Resultados esperados',l:['Diagnóstico territorial legitimado pela comunidade','Necessidades priorizadas coletivamente','Linha de base de indicadores para comparação futura','Relação de confiança estabelecida']}
+  ],
+  extra:'aviso-escuta'},
+ {icone:'🧭',titulo:'Mapear forças, fraquezas, oportunidades e ameaças',fase:'Etapa 2 · Análise FOFA (SWOT) participativa',
+  resumo:'Com o diagnóstico em mãos, a comunidade constrói sua matriz FOFA em oficina participativa: o que temos de bom aqui dentro? O que nos limita? O que o mundo lá fora oferece? O que nos ameaça? A matriz orienta a estratégia — usar forças para capturar oportunidades e proteger-se das ameaças. Clique nos quadrantes abaixo para ver exemplos do contexto maranhense.',
+  blocos:[
+   {t:'🛠️ Como fazer',l:['Oficina FOFA com tarjetas e votação por pontos (priorização coletiva)','Ambiente de inteligência do Módulo 7 apoia a análise com dados de mercado','Validação da matriz em assembleia da associação/cooperativa']},
+   {t:'🎁 Resultados esperados',l:['Matriz FOFA priorizada e legitimada','Estratégias FO, FA, fO e fA definidas','Insumo direto para a decisão da etapa 3']}
+  ],
+  extra:'fofa'},
+ {icone:'📦',titulo:'Verificar o portfólio da Embrapa — ou cocriar',fase:'Etapa 3 · Decisão estratégica',
+  resumo:'Momento de decisão: existe alguma tecnologia ou solução do portfólio da Embrapa que se enquadra nas necessidades e no contexto desta comunidade? Se sim, ela é adaptada participativamente. Se não, abre-se um processo de cocriação de uma estratégia de inovação social com a própria comunidade. Clique nos dois caminhos abaixo para explorar.',
+  blocos:[],
+  extra:'decisao'},
+ {icone:'🧪',titulo:'Implementar protótipos',fase:'Etapa 4 · Prototipagem em Living Labs',
+  resumo:'A solução — do portfólio ou cocriada — é implantada em escala reduzida e controlada, em unidades demonstrativas e laboratórios vivos (Living Labs) dentro da própria comunidade: quilombos, comunidades de babaçu, assentamentos. Inovação testada com quem produz.',
+  blocos:[
+   {t:'🛠️ Como fazer',l:['Selecionar famílias/áreas-piloto com critérios definidos coletivamente','Instalar unidades demonstrativas (ex.: Sisteminha, parcela de SAF, campo de manivas RENIVA)','Registrar tudo na plataforma: insumos, práticas, custos, produção (Módulo 2)','Assistência técnica presente e capacitação em serviço','Recomendações técnicas geradas por IA para cada território (Módulo 3)']},
+   {t:'📊 O que medir',l:['Indicadores de qualidade do processo: participação real, cocriação, coprodução','Custos, produtividade e adaptação da tecnologia ao contexto local','Engajamento das famílias-piloto']},
+   {t:'🎁 Resultados esperados',l:['Protótipos funcionando em condições reais','Aprendizados documentados (o que funciona, o que precisa ajustar)','Comunidade vendo resultados concretos — combustível da confiança']}
+  ]},
+ {icone:'✅',titulo:'Conduzir testes e validação',fase:'Etapa 5 · Avaliação do processo',
+  resumo:'Os protótipos são avaliados sistematicamente com a comunidade: os resultados técnicos apareceram? O processo respeitou os princípios da inovação social? A solução é validada, ajustada ou redesenhada — errar pequeno para acertar grande.',
+  blocos:[
+   {t:'🛠️ Como fazer',l:['Ciclos de teste–ajuste–reteste com prazos definidos','Oficinas de avaliação participativa: a comunidade julga os resultados','Comparação dos indicadores com a linha de base da etapa 1','Triangulação: dados da comunidade × bases oficiais × observação técnica','Painéis do Módulo 4 (mapas, séries históricas, diagnósticos) para leitura coletiva']},
+   {t:'📊 O que medir',l:['Evolução do ISA e dos índices sintéticos (IOC, IDP, IIR…)','Qualidade do processo: horizontalidade, transparência, decisões coletivas','Resultados sociais: autonomia, novas capacidades, renda, participação de mulheres e jovens']},
+   {t:'🎁 Resultados esperados',l:['Solução validada (ou redesenhada) com evidências','Protocolo local de implantação documentado','Decisão coletiva de escalar para mais famílias']}
+  ]},
+ {icone:'🎓',titulo:'Formar a comunidade para manter a atuação',fase:'Etapa 6 · Formação e apropriação',
+  resumo:'A tecnologia só vira inovação social quando a comunidade se apropria dela. Esta etapa forma multiplicadores locais e fortalece a organização comunitária para que a manutenção, a gestão e a expansão da iniciativa fiquem nas mãos do território — garantindo a continuidade da inovação social sem dependência permanente de agentes externos.',
+  blocos:[
+   {t:'🛠️ Como fazer',l:['Formação de multiplicadores: agricultores-experimentadores, jovens e mulheres monitores','Capacitação em gestão: associativismo, prestação de contas, acesso a editais e crédito','Alfabetização digital: uso da plataforma, registro de dados, leitura de painéis','Intercâmbios entre comunidades (aprendizagem entre pares)','Fortalecimento institucional: estatuto ativo, alternância de lideranças, transparência']},
+   {t:'📊 O que medir',l:['Nº de multiplicadores formados e ativos','Índice de Inclusão Digital (IID) e uso autônomo da plataforma','Institucionalidade: regras claras, registros, segurança jurídica']},
+   {t:'🎁 Resultados esperados',l:['Comunidade capaz de operar, manter e expandir a inovação','Governança local fortalecida e participativa','Continuidade garantida: o conhecimento fica no território']}
+  ]},
+ {icone:'📡',titulo:'Monitorar e acompanhar continuamente',fase:'Etapa 7 · Monitoramento contínuo → recomeço',
+  resumo:'A inovação social não termina: o monitoramento contínuo pela plataforma acompanha os indicadores da comunidade ao longo do tempo, percebe quando surgem novas dificuldades e dispara novas interações e iniciativas — reabrindo o ciclo na etapa 1, agora com uma comunidade mais forte.',
+  blocos:[
+   {t:'🛠️ Como fazer',l:['Alimentação contínua de dados pela própria comunidade (ciência cidadã)','Painéis de governança inteligente (Módulo 8) com alertas de tendência','Acompanhamento do IVCT, ISA e índices sintéticos em séries históricas','Análises preditivas de IA: antecipar riscos (seca, queda de renda, insegurança alimentar)','Encontros periódicos de devolutiva: a comunidade lê e discute seus próprios dados']},
+   {t:'🔔 Sinais de alerta que reabrem o ciclo',l:['Queda no ISA ou em qualquer capital do IVCT','Nova demanda registrada pela comunidade na plataforma','Evento climático extremo ou mudança de mercado','Desmobilização da organização comunitária']},
+   {t:'🎁 Resultados esperados',l:['Detecção precoce de novas dificuldades','Novas iterações de inovação social iniciadas a tempo','Evidências para políticas públicas, PSA, carbono e investimentos','Inovação transformadora: mudança permanente das estruturas sociais']}
+  ],
+  extra:'ciclo'}
+];
+
+/* ================= Renderização do infográfico ================= */
+let etapaAtual = 0;
+const trilha = document.getElementById('trilha');
+etapas.forEach((e,i)=>{
+  const bt = document.createElement('button');
+  bt.className='no-etapa'; bt.setAttribute('role','tab');
+  bt.innerHTML = `<span class="bolha" data-n="${i+1}">${e.icone}</span><span class="tit">${e.titulo}</span>`;
+  bt.addEventListener('click',()=>selecionarEtapa(i));
+  trilha.appendChild(bt);
+});
+
+function selecionarEtapa(i){
+  etapaAtual = (i+etapas.length)%etapas.length;
+  trilha.querySelectorAll('.no-etapa').forEach((b,j)=>{
+    b.classList.toggle('ativa',j===etapaAtual);
+    b.setAttribute('aria-selected',j===etapaAtual);
+  });
+  document.getElementById('progresso').style.width = ((etapaAtual+1)/etapas.length*100)+'%';
+  renderDetalhe(etapas[etapaAtual]);
+}
+function mudarEtapa(d){ selecionarEtapa(etapaAtual+d); document.getElementById('detalhe-etapa').scrollIntoView({behavior:'smooth',block:'nearest'}); }
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('painel-passoapasso').classList.contains('ativo')) return;
+  if(e.key==='ArrowRight') mudarEtapa(1);
+  if(e.key==='ArrowLeft') mudarEtapa(-1);
+});
+
+function renderDetalhe(e){
+  let html = `<div class="detalhe-cab">
+    <div class="icone-g">${e.icone}</div>
+    <div><span class="fase">${e.fase}</span><h3>${e.titulo}</h3><p class="resumo">${e.resumo}</p></div>
+  </div>`;
+  if(e.blocos.length){
+    html += `<div class="detalhe-grade">` + e.blocos.map(b=>
+      `<div class="mini-bloco"><h4>${b.t}</h4><ul>${b.l.map(li=>`<li>${li}</li>`).join('')}</ul></div>`).join('') + `</div>`;
+  }
+  if(e.extra==='aviso-escuta'){
+    html += `<div class="faixa" style="margin-top:18px"><div class="icone">🌱</div><p><b>Princípio-chave:</b> origem endógena das demandas. Se a necessidade não for reconhecida pela própria comunidade, nenhuma tecnologia — por melhor que seja — se sustentará no território.</p></div>`;
+  }
+  if(e.extra==='fofa'){
+    html += `<div class="fofa" id="fofa">
+      <button class="quad q-f" data-q="f">💪 Forças <small>Ambiente interno · positivo — clique para exemplos</small></button>
+      <button class="quad q-fr" data-q="fr">⛓️ Fraquezas <small>Ambiente interno · negativo — clique para exemplos</small></button>
+      <button class="quad q-o" data-q="o">🌅 Oportunidades <small>Ambiente externo · positivo — clique para exemplos</small></button>
+      <button class="quad q-a" data-q="a">⛈️ Ameaças <small>Ambiente externo · negativo — clique para exemplos</small></button>
+      <div class="fofa-detalhe" id="fofa-detalhe"></div>
+    </div>`;
+  }
+  if(e.extra==='decisao'){
+    html += `<div class="decisao">
+      <div class="losango">◆ Existe tecnologia no portfólio da Embrapa que se enquadra no contexto e nas necessidades desta comunidade?</div>
+      <div class="ramos">
+        <div class="ramo sim" role="button" tabindex="0" data-r="sim"><b>✅ SIM → adaptar e implantar participativamente</b><p>A tecnologia existente é ajustada ao contexto local com a comunidade. Clique para ver o portfólio e o caminho.</p><div class="ramo-conteudo" id="ramo-sim">
+          <p style="margin-bottom:8px"><b>Portfólio Embrapa disponível no Maranhão:</b></p>
+          <span class="tag-tec">🌳 SAF — Sistemas Agroflorestais</span><span class="tag-tec">🐟 Sisteminha Embrapa</span><span class="tag-tec">🌱 RENIVA — mandioca saudável</span><span class="tag-tec">🐄 ILPF</span><span class="tag-tec">🥥 Cadeia do babaçu</span>
+          <ul style="margin-top:10px"><li>Cruzar a matriz FOFA e o diagnóstico com os requisitos de cada tecnologia</li><li>Adaptação participativa: a comunidade ajusta a tecnologia ao seu modo de vida (nunca o contrário)</li><li>Pacotes de recomendação técnica gerados por IA para o território (Módulo 3)</li><li>Planejar a prototipagem da etapa 4</li></ul></div></div>
+        <div class="ramo nao" role="button" tabindex="0" data-r="nao"><b>🧩 NÃO → cocriar uma estratégia de inovação social</b><p>Não há solução pronta: a estratégia é construída coletivamente. Clique para ver como cocriar.</p><div class="ramo-conteudo" id="ramo-nao">
+          <ul><li><b>Desafios territoriais:</b> a comunidade define o problema em linguagem própria</li><li><b>Oficinas de cocriação e coprodução do conhecimento:</b> saber tradicional + saber técnico em pé de igualdade</li><li><b>Living Labs:</b> laboratório vivo para experimentar soluções inéditas</li><li><b>Inovação aberta e editais:</b> atrair parceiros (universidades, SEBRAE, startups) para o desafio</li><li><b>Incubação de projetos e empreendedorismo rural:</b> transformar a ideia em iniciativa gerida pela comunidade</li><li>Registrar indicadores próprios da comunidade e triangular com dados secundários</li></ul></div></div>
+      </div>
+      <div class="faixa" style="margin-top:18px;text-align:left"><div class="icone">🤝</div><p><b>Nos dois caminhos</b> valem os mesmos critérios: direcionamento a problemas coletivos, apropriação coletiva do valor, origem endógena, aprendizagem coletiva e governança participativa (Amâncio, 2019).</p></div>
+    </div>`;
+  }
+  if(e.extra==='ciclo'){
+    html += `<div class="faixa" style="margin-top:18px"><div class="icone">🔁</div><p><b>O ciclo recomeça:</b> ao perceber uma nova dificuldade, a plataforma sinaliza — e a Embrapa e a comunidade voltam à etapa 1 para compreender o novo contexto. Cada volta do ciclo encontra uma comunidade mais organizada, mais capaz e mais valorada.</p>
+    <button class="btn btn-sol" style="flex:none" onclick="selecionarEtapa(0)">Recomeçar ciclo ↺</button></div>`;
+  }
+  document.getElementById('detalhe-etapa').innerHTML = html;
+  ativarInterativosDetalhe();
+}
+
+const fofaDados = {
+  f:{t:'💪 Forças — exemplos no contexto maranhense',l:['Conhecimento tradicional (quebradeiras de coco, pesca artesanal, roças diversificadas)','Associação ou cooperativa ativa com lideranças reconhecidas','Biodiversidade nativa e serviços ecossistêmicos abundantes','Experiência prévia com tecnologias sociais (SAF, Sisteminha)','Forte capital social: mutirões, confiança, ação coletiva']},
+  fr:{t:'⛓️ Fraquezas — exemplos no contexto maranhense',l:['Baixa formalização da organização (sem estatuto ativo ou prestação de contas)','Infraestrutura precária: estradas, energia, internet, armazenamento','Dependência de intermediários na comercialização','Baixa alfabetização digital e êxodo de jovens','Insegurança alimentar sazonal (entressafra)']},
+  o:{t:'🌅 Oportunidades — exemplos no contexto maranhense',l:['Compras públicas: PNAE e PAA para a produção familiar','Mercados de carbono, PSA e bioeconomia do babaçu','Editais de fomento e parcerias com universidades e SEBRAE','Demanda crescente por produtos rastreáveis e de origem sociobiodiversa','Ecoturismo e valorização do patrimônio cultural']},
+  a:{t:'⛈️ Ameaças — exemplos no contexto maranhense',l:['Eventos climáticos extremos: secas prolongadas e irregularidade das chuvas','Pressão sobre territórios tradicionais e insegurança fundiária','Oscilação de preços e mercados dominados por atravessadores','Descontinuidade de políticas públicas','Degradação ambiental no entorno (desmatamento, queimadas)']}
+};
+function ativarInterativosDetalhe(){
+  const fofa = document.getElementById('fofa');
+  if(fofa){
+    fofa.querySelectorAll('.quad').forEach(q=>q.addEventListener('click',()=>{
+      fofa.querySelectorAll('.quad').forEach(x=>x.classList.remove('sel'));
+      q.classList.add('sel');
+      const d = fofaDados[q.dataset.q];
+      const det = document.getElementById('fofa-detalhe');
+      det.innerHTML = `<h4>${d.t}</h4><ul>${d.l.map(li=>`<li>${li}</li>`).join('')}</ul>`;
+      det.classList.add('aberto');
+    }));
+  }
+  document.querySelectorAll('.ramo').forEach(r=>{const ab=()=>{
+    document.querySelectorAll('.ramo').forEach(x=>{x.classList.remove('sel');x.querySelector('.ramo-conteudo').classList.remove('aberto');});
+    r.classList.add('sel');
+    r.querySelector('.ramo-conteudo').classList.add('aberto');
+  };r.addEventListener('click',ab);r.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();ab();}});});
+}
+selecionarEtapa(0);
+</script>
+</body>
+</html>
