@@ -492,7 +492,7 @@ footer .base{border-top:1px solid rgba(255,255,255,.15);padding:16px 24px;text-a
       <h1>Quando o território vira conhecimento, o conhecer gera <em>valoração</em> — e a valoração impulsiona a <em>inovação social</em>.</h1>
       <p class="sub">A Plataforma de Valoração Comunitária e Inovação Social Territorial (PVCIST) é uma infraestrutura inteligente para gerar, organizar, valorizar e transformar o conhecimento sobre — e produzido por — comunidades rurais, povos tradicionais, agricultores familiares, instituições de pesquisa e gestores públicos do Maranhão.</p>
       <div class="hero-acoes">
-        <a class="btn btn-sol" href="#" onclick="irAba('passoapasso');return false;">Ver o passo a passo interativo →</a>
+        <a class="btn btn-sol" href="#" onclick="irAbaSecao('inovacao','secao-passo-a-passo');return false;">Ver o passo a passo interativo →</a>
         <a class="btn btn-contorno" href="#" onclick="irAba('inovacao');return false;">Como fazer inovação social</a>
       </div>
       <div class="hero-stats">
@@ -563,11 +563,11 @@ footer .base{border-top:1px solid rgba(255,255,255,.15);padding:16px 24px;text-a
         <p>Cada participante pode registrar dados de produção agropecuária, biodiversidade, recursos naturais, serviços ecossistêmicos, cultura local, inovação, economia, infraestrutura e indicadores sociais — que alimentam modelos de IA e ferramentas de Business Intelligence.</p>
       </div>
       <div class="modulos-fluxo">
-        <div class="mod-cartao"><span class="mod-n">MÓDULO 01</span><h3>Segurança e soberania alimentar</h3><p>Indicadores multidimensionais sobre disponibilidade, autoconsumo, diversidade alimentar e estado nutricional. Sintetizados no ISA.</p><a href="#" onclick="irAba('seguranca');return false;" style="font-size:.82rem;font-weight:700;color:var(--azulejo)">Explorar módulo →</a></div>
+        <div class="mod-cartao"><span class="mod-n">MÓDULO 01</span><h3>Segurança e soberania alimentar</h3><p>Indicadores multidimensionais sobre disponibilidade, autoconsumo, diversidade alimentar e estado nutricional. Sintetizados no ISA.</p><a href="#" onclick="irAbaSecao('mensurar',null,'mensurar','alimentar');return false;" style="font-size:.82rem;font-weight:700;color:var(--azulejo)">Explorar módulo →</a></div>
         <div class="mod-cartao"><span class="mod-n">MÓDULO 02</span><h3>Coleta participativa</h3><p>Comunidades registram informações via app/web: produção agrícola, meliponicultura, apicultura, pesca, extrativismo, SAF, ILPF, carbono, biodiversidade, turismo rural e patrimônio cultural.</p></div>
         <div class="mod-cartao"><span class="mod-n">MÓDULO 03</span><h3>Inteligência territorial</h3><p>Integração automática com bases oficiais — IBGE, INPE, MapBiomas, SEEG, Embrapa, ANA, INMET — para contextualizar resultados das tecnologias sociais.</p></div>
         <div class="mod-cartao"><span class="mod-n">MÓDULO 04</span><h3>Visualizações</h3><p>Mapas, indicadores, séries históricas, diagnósticos, previsões, cenários futuros e a própria valoração da comunidade, em painéis interativos (BI / Power BI).</p></div>
-        <div class="mod-cartao nucleo"><span class="mod-n">MÓDULO 05 · NÚCLEO</span><h3>Valoração comunitária</h3><p>Ativos do território reconhecidos e quantificados: serviços ecossistêmicos, patrimônio cultural, produção sustentável, conhecimento tradicional e capital social.</p><a href="#" onclick="irAba('valoracao');return false;" style="font-size:.82rem;font-weight:700;color:var(--azulejo)">Explorar módulo →</a></div>
+        <div class="mod-cartao nucleo"><span class="mod-n">MÓDULO 05 · NÚCLEO</span><h3>Valoração comunitária</h3><p>Ativos do território reconhecidos e quantificados: serviços ecossistêmicos, patrimônio cultural, produção sustentável, conhecimento tradicional e capital social.</p><a href="#" onclick="irAbaSecao('mensurar',null,'mensurar','valoracao');return false;" style="font-size:.82rem;font-weight:700;color:var(--azulejo)">Explorar módulo →</a></div>
         <div class="mod-cartao nucleo"><span class="mod-n">MÓDULO 06 · NÚCLEO</span><h3>Inovação social</h3><p>Núcleo metodológico: desafios territoriais, Living Labs, incubação de projetos, editais, inovação aberta e empreendedorismo rural.</p><a href="#" onclick="irAba('inovacao');return false;" style="font-size:.82rem;font-weight:700;color:var(--azulejo)">Explorar módulo →</a></div>
         <div class="mod-cartao"><span class="mod-n">MÓDULO 07</span><h3>Mercado e oportunidades</h3><p>Marketplace territorial, certificações, rastreabilidade, crédito rural, carbono, PSA, investidores e compras públicas (PNAE, PAA). Ambiente de inteligência com análise FOFA/SWOT.</p></div>
         <div class="mod-cartao"><span class="mod-n">MÓDULO 08</span><h3>Governança inteligente</h3><p>Painéis estratégicos para gestores públicos, cooperativas, associações, Embrapa, universidades, secretarias e financiadores.</p></div>
@@ -614,7 +614,7 @@ footer .base{border-top:1px solid rgba(255,255,255,.15);padding:16px 24px;text-a
     </div>
   </section>
 
-  <section class="bloco alt">
+  <section class="bloco alt" id="secao-passo-a-passo">
     <div class="container">
       <div class="bloco-cab">
         <span class="eyebrow">Infográfico interativo</span>
@@ -1192,10 +1192,10 @@ footer .base{border-top:1px solid rgba(255,255,255,.15);padding:16px 24px;text-a
       <h4>Explorar</h4>
       <ul>
         <li><a href="#" style="color:inherit" onclick="irAba('inicio');return false;">Visão geral e módulos</a></li>
-        <li><a href="#" style="color:inherit" onclick="irAba('inovacao');return false;">Como fazer inovação social</a></li>
-        <li><a href="#" style="color:inherit" onclick="irAba('seguranca');return false;">Segurança alimentar</a></li>
-        <li><a href="#" style="color:inherit" onclick="irAba('valoracao');return false;">Valoração e IVCT</a></li>
-        <li><a href="#" style="color:inherit" onclick="irAba('passoapasso');return false;">Passo a passo · MA</a></li>
+        <li><a href="#" style="color:inherit" onclick="irAba('inovacao');return false;">Fazer inovação social</a></li>
+        <li><a href="#" style="color:inherit" onclick="irAbaSecao('mensurar',null,'mensurar','alimentar');return false;">Segurança alimentar</a></li>
+        <li><a href="#" style="color:inherit" onclick="irAbaSecao('mensurar',null,'mensurar','valoracao');return false;">Valoração e IVCT</a></li>
+        <li><a href="#" style="color:inherit" onclick="irAbaSecao('inovacao','secao-passo-a-passo');return false;">Passo a passo</a></li>
       </ul>
     </div>
     <div>
@@ -1229,6 +1229,18 @@ botoesAba.forEach(b=>b.addEventListener('click',()=>irAba(b.dataset.aba)));
 function irSub(grupo,id){
   document.querySelectorAll(`.subabas[data-grupo="${grupo}"] button`).forEach(b=>b.classList.toggle('ativa',b.dataset.sub===id));
   document.querySelectorAll(`.subpainel[data-grupo="${grupo}"]`).forEach(p=>p.classList.toggle('ativo',p.dataset.sub===id));
+}
+
+/* ================= Navegação para aba + sub-aba + seção específica (links do herói/rodapé) ================= */
+function irAbaSecao(aba, elId, subGrupo, subId){
+  irAba(aba);
+  if(subGrupo && subId) irSub(subGrupo, subId);
+  if(elId){
+    setTimeout(()=>{
+      const el = document.getElementById(elId);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    }, 80);
+  }
 }
 
 /* ================= EBIA — Escala Brasileira de Insegurança Alimentar ================= */
