@@ -7,31 +7,34 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>if(typeof L==='undefined'){document.write('<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"><\/script>');}</script>
 <style>
 :root{
-  --mata:#123B33;          /* verde mata profunda */
-  --mata-2:#1C5247;
-  --babacu:#3E8464;        /* verde folha de babaçu */
-  --babacu-claro:#DCEDE2;
-  --palha:#F7F4EA;         /* palha trançada — fundo */
-  --palha-2:#EFE9D8;
-  --azulejo:#1F5FA8;       /* azul dos azulejos de São Luís */
-  --azulejo-claro:#E3EDF8;
-  --barro:#B4552D;         /* barro/telha */
-  --barro-claro:#F6E4DA;
-  --sol:#E0A526;           /* sol / palha dourada */
-  --sol-claro:#FBF0D6;
-  --tinta:#1E2B27;
-  --tinta-suave:#4C5B55;
-  --linha:#DCD6C4;
+  /* Paleta institucional Embrapa (embrapa.br) — azul-escuro, azul-médio, azul-claro, cinzas */
+  --mata:#00264C;          /* azul-escuro institucional — cor primária */
+  --mata-2:#003A6B;
+  --babacu:#3A74B0;        /* azul-médio institucional — accent secundário */
+  --babacu-claro:#E7F0FA;
+  --palha:#ECECEC;         /* cinza-claro institucional — fundo de página */
+  --palha-2:#E1E4E7;
+  --azulejo:#1F5FA8;       /* azul institucional (tom adicional) */
+  --azulejo-claro:#DCE7F5;
+  --barro:#0D366B;         /* azul profundo — ênfase / prioridade alta */
+  --barro-claro:#E4E8EC;
+  --sol:#2A78D6;           /* azul vivo — CTA / estado ativo */
+  --sol-claro:#EDF3FB;
+  --tinta:#212529;
+  --tinta-suave:#5A6773;
+  --linha:#D9DFE6;
   --branco:#FFFFFF;
-  --raio:14px;
-  --sombra:0 2px 8px rgba(18,59,51,.08);
-  --sombra-2:0 12px 32px rgba(18,59,51,.14);
+  --raio:8px;
+  --sombra:0 2px 8px rgba(0,38,76,.08);
+  --sombra-2:0 12px 32px rgba(0,38,76,.14);
   --fonte-display:"Bricolage Grotesque",system-ui,sans-serif;
   --fonte-texto:"Instrument Sans",system-ui,sans-serif;
+  --sidebar-w:236px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -44,9 +47,9 @@ h1,h2,h3,h4{font-family:var(--fonte-display);line-height:1.15;color:var(--mata)}
 .eyebrow::before{content:"";width:22px;height:2px;background:var(--sol);display:inline-block}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
 
-/* ---------- Header / navegação ---------- */
-header.topo{position:sticky;top:0;z-index:60;background:var(--mata);color:#fff;box-shadow:0 2px 12px rgba(0,0,0,.18)}
-.topo-inner{display:flex;align-items:center;gap:16px;padding:12px 24px;max-width:1280px;margin:0 auto;flex-wrap:wrap}
+/* ---------- Header (barra superior, só marca) ---------- */
+header.topo{position:sticky;top:0;z-index:70;background:var(--mata);color:#fff;box-shadow:0 2px 12px rgba(0,0,0,.18);height:64px}
+.topo-inner{display:flex;align-items:center;gap:16px;padding:0 24px;max-width:100%;height:100%;margin:0 auto}
 .marca{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
 .marca-simbolo{width:42px;height:42px;border-radius:10px;background:
   conic-gradient(from 45deg,var(--azulejo) 0 25%,var(--babacu) 0 50%,var(--sol) 0 75%,var(--barro) 0 100%);
@@ -54,11 +57,32 @@ header.topo{position:sticky;top:0;z-index:60;background:var(--mata);color:#fff;b
 .marca-simbolo span{width:16px;height:16px;background:var(--palha);border-radius:4px;transform:rotate(45deg)}
 .marca b{font-family:var(--fonte-display);font-size:1.06rem;letter-spacing:.02em;display:block;line-height:1.1}
 .marca small{font-size:.68rem;opacity:.75;letter-spacing:.08em;text-transform:uppercase}
-nav.abas{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
-nav.abas button{background:transparent;border:1px solid transparent;color:#DCEDE2;padding:9px 14px;border-radius:999px;font-size:.86rem;font-weight:600;transition:.18s}
-nav.abas button:hover{background:rgba(255,255,255,.1)}
-nav.abas button.ativa{background:var(--sol);color:var(--mata);border-color:var(--sol)}
-nav.abas button:focus-visible{outline:3px solid var(--sol);outline-offset:2px}
+
+/* ---------- Estrutura app: sidebar + conteúdo ---------- */
+.appshell{display:flex;align-items:flex-start;min-height:calc(100vh - 64px)}
+nav.sidebar{width:var(--sidebar-w);flex:none;background:var(--mata);position:sticky;top:64px;height:calc(100vh - 64px);
+  display:flex;flex-direction:column;gap:3px;padding:18px 12px;overflow-y:auto;box-shadow:2px 0 12px rgba(0,0,0,.1)}
+nav.sidebar button{display:flex;align-items:center;gap:12px;width:100%;background:transparent;border:0;border-radius:var(--raio);
+  padding:11px 13px;color:#C9D8E6;font-size:.86rem;font-weight:600;text-align:left;transition:.15s;white-space:nowrap}
+nav.sidebar button .ico{font-size:1.2rem;width:26px;text-align:center;flex:none}
+nav.sidebar button .rotulo{overflow:hidden;text-overflow:ellipsis}
+nav.sidebar button:hover{background:rgba(255,255,255,.1);color:#fff}
+nav.sidebar button.ativa{background:#fff;color:var(--mata);box-shadow:var(--sombra)}
+nav.sidebar button:focus-visible{outline:3px solid var(--sol);outline-offset:2px}
+.sidebar-rodape{margin-top:auto;padding:12px 13px 4px;font-size:.68rem;color:#8CA9C4;line-height:1.5;border-top:1px solid rgba(255,255,255,.12);padding-top:14px}
+main{flex:1;min-width:0;width:calc(100% - var(--sidebar-w));max-width:100%;overflow-x:hidden}
+
+@media(max-width:900px){
+  .appshell{flex-direction:column;min-height:auto}
+  main{width:100%;max-width:100vw}
+  nav.sidebar{position:fixed;top:auto;bottom:0;left:0;right:0;width:100%;height:auto;z-index:70;
+    flex-direction:row;align-items:stretch;gap:2px;padding:6px;overflow-x:auto;box-shadow:0 -2px 12px rgba(0,0,0,.18)}
+  nav.sidebar button{flex-direction:column;gap:3px;padding:7px 8px;font-size:.62rem;flex:1 1 auto;min-width:64px;text-align:center;white-space:normal}
+  nav.sidebar button .ico{font-size:1.3rem;width:auto}
+  nav.sidebar button .rotulo{line-height:1.15}
+  .sidebar-rodape{display:none}
+  main{padding-bottom:78px}
+}
 
 /* ---------- Painéis (abas) ---------- */
 .painel{display:none;animation:surge .35s ease}
@@ -77,17 +101,17 @@ nav.abas button:focus-visible{outline:3px solid var(--sol);outline-offset:2px}
 .hero .eyebrow{color:var(--sol)}
 .hero h1{color:#fff;font-size:clamp(2rem,4.6vw,3.4rem);font-weight:700;max-width:19ch;margin:14px 0 18px;letter-spacing:-.01em}
 .hero h1 em{font-style:normal;color:var(--sol)}
-.hero p.sub{max-width:62ch;color:#D7E4DC;font-size:1.06rem}
+.hero p.sub{max-width:62ch;color:#D7E3EE;font-size:1.06rem}
 .hero-acoes{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:999px;font-weight:700;font-size:.92rem;border:2px solid transparent;text-decoration:none;transition:.18s}
-.btn-sol{background:var(--sol);color:var(--mata)}
+.btn-sol{background:var(--sol);color:#fff}
 .btn-sol:hover{filter:brightness(1.08)}
 .btn-contorno{border-color:rgba(255,255,255,.4);color:#fff;background:transparent}
 .btn-contorno:hover{border-color:#fff;background:rgba(255,255,255,.08)}
 .hero-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:rgba(255,255,255,.16);border-radius:var(--raio);overflow:hidden;margin-top:44px;max-width:820px}
-.hero-stats div{background:rgba(18,59,51,.88);padding:16px 18px}
+.hero-stats div{background:rgba(0,38,76,.88);padding:16px 18px}
 .hero-stats b{font-family:var(--fonte-display);font-size:1.5rem;color:var(--sol);display:block}
-.hero-stats span{font-size:.78rem;color:#CBDDD3;letter-spacing:.03em}
+.hero-stats span{font-size:.78rem;color:#C9D8E6;letter-spacing:.03em}
 
 /* ---------- Seções ---------- */
 section.bloco{padding:58px 0}
@@ -111,10 +135,10 @@ section.bloco.alt{background:var(--branco)}
 
 .selo{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;margin:2px}
 .s-verde{background:var(--babacu-claro);color:var(--mata)} .s-azul{background:var(--azulejo-claro);color:var(--azulejo)}
-.s-sol{background:var(--sol-claro);color:#8a6410} .s-barro{background:var(--barro-claro);color:var(--barro)}
+.s-sol{background:var(--sol-claro);color:var(--mata)} .s-barro{background:var(--barro-claro);color:var(--barro)}
 
 /* faixa consequência */
-.faixa{background:linear-gradient(120deg,var(--mata),var(--mata-2));color:#EAF3EE;border-radius:var(--raio);padding:26px 28px;display:flex;gap:18px;align-items:flex-start}
+.faixa{background:linear-gradient(120deg,var(--mata),var(--mata-2));color:#E7F0FA;border-radius:var(--raio);padding:26px 28px;display:flex;gap:18px;align-items:flex-start}
 .faixa b{color:var(--sol)}
 .faixa .icone{background:rgba(255,255,255,.12);margin:0;flex:none}
 
@@ -201,7 +225,7 @@ input[type=range]:focus-visible{outline:3px solid var(--azulejo);outline-offset:
 @media(max-width:640px){.fofa{grid-template-columns:1fr}}
 .fofa button.quad{border:0;border-radius:12px;padding:18px;text-align:left;color:#fff;font-weight:700;font-size:1rem;transition:.2s;position:relative}
 .fofa button.quad small{display:block;font-weight:500;font-size:.78rem;opacity:.92;margin-top:4px}
-.fofa .q-f{background:var(--babacu)} .fofa .q-fr{background:var(--barro)} .fofa .q-o{background:var(--azulejo)} .fofa .q-a{background:#7A5A18}
+.fofa .q-f{background:var(--babacu)} .fofa .q-fr{background:var(--barro)} .fofa .q-o{background:var(--azulejo)} .fofa .q-a{background:#47535E}
 .fofa button.quad:hover{transform:scale(1.02)}
 .fofa button.quad.sel{outline:4px solid var(--sol);outline-offset:2px}
 .fofa-detalhe{grid-column:1/-1;background:var(--palha);border-radius:12px;padding:18px;font-size:.9rem;display:none}
@@ -233,10 +257,9 @@ input[type=range]:focus-visible{outline:3px solid var(--azulejo);outline-offset:
 .val-cartao p.def{font-size:.86rem;opacity:.94;margin:8px 0 12px}
 .val-cartao .ex{margin-top:auto;font-size:.78rem;background:rgba(255,255,255,.16);border-radius:10px;padding:10px 12px;line-height:1.5}
 .v-obj{background:linear-gradient(140deg,var(--mata),var(--babacu))}
-.v-per{background:linear-gradient(140deg,#8a5a1a,var(--sol));color:#2b2107}
-.v-per h3{color:#2b2107}
-.v-soc{background:linear-gradient(140deg,#123b66,var(--azulejo))}
-.v-pot{background:linear-gradient(140deg,#7a3517,var(--barro))}
+.v-per{background:linear-gradient(140deg,var(--azulejo),var(--sol))}
+.v-soc{background:linear-gradient(140deg,var(--mata),var(--azulejo))}
+.v-pot{background:linear-gradient(140deg,#47535E,var(--barro))}
 
 /* fluxo cadeia de valor */
 .cadeia{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;counter-reset:passo}
@@ -246,7 +269,7 @@ input[type=range]:focus-visible{outline:3px solid var(--azulejo);outline-offset:
 .cadeia .elo p{font-size:.82rem;color:var(--tinta-suave)}
 
 /* rodapé */
-footer{background:var(--mata);color:#BFD4CA;margin-top:70px}
+footer{background:var(--mata);color:#C7D6E3;margin-top:70px}
 .rodape-inner{max-width:1180px;margin:0 auto;padding:44px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:28px;font-size:.88rem}
 footer h4{color:#fff;font-size:.95rem;margin-bottom:10px}
 footer ul{list-style:none}
@@ -274,7 +297,7 @@ footer .base{border-top:1px solid rgba(255,255,255,.15);padding:16px 24px;text-a
 .mapa-provenance{background:linear-gradient(120deg,var(--sol-claro),#fff);border:1px solid var(--sol);border-left:6px solid var(--sol);border-radius:12px;padding:14px 18px;display:flex;gap:14px;align-items:flex-start;margin-bottom:22px}
 .mapa-provenance .ic{font-size:1.3rem;flex:none}
 .mapa-provenance p{font-size:.86rem;color:var(--tinta-suave);margin:0}
-.mapa-provenance b{color:#8a6410}
+.mapa-provenance b{color:var(--barro)}
 
 .mapa-toolbar{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;background:var(--branco);border:1px solid var(--linha);border-radius:14px;padding:16px 18px;box-shadow:var(--sombra);margin-bottom:16px}
 .mapa-grupo{display:flex;flex-direction:column;gap:6px}
@@ -287,7 +310,7 @@ footer .base{border-top:1px solid rgba(255,255,255,.15);padding:16px 24px;text-a
 
 .mapa-layout{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;align-items:stretch}
 @media(max-width:900px){.mapa-layout{grid-template-columns:1fr}}
-#mapaMA{height:560px;border-radius:16px;border:1px solid var(--linha);box-shadow:var(--sombra-2);z-index:1;background:#dfe6e2}
+#mapaMA{height:560px;border-radius:16px;border:1px solid var(--linha);box-shadow:var(--sombra-2);z-index:1;background:#E4E9EE}
 @media(max-width:900px){#mapaMA{height:420px}}
 .leaflet-container{font-family:var(--fonte-texto)}
 
@@ -312,7 +335,7 @@ footer .base{border-top:1px solid rgba(255,255,255,.15);padding:16px 24px;text-a
 .com-cab h3{font-size:1.15rem;line-height:1.15;color:var(--mata)}
 .com-cab .meso{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--babacu)}
 .tag-quad{display:inline-block;font-size:.72rem;font-weight:800;padding:4px 10px;border-radius:999px;color:#fff;white-space:nowrap}
-.q1{background:var(--barro)} .q2{background:var(--sol);color:#5c4409} .q3{background:var(--azulejo)} .q4{background:#6b7d73}
+.q1{background:var(--barro)} .q2{background:var(--sol)} .q3{background:var(--azulejo)} .q4{background:#B7D3F6;color:var(--barro)}
 .tag-real{font-size:.64rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:6px}
 .real-sim{background:var(--babacu-claro);color:var(--mata)} .real-nao{background:var(--barro-claro);color:var(--barro)}
 
@@ -371,7 +394,7 @@ footer .base{border-top:1px solid rgba(255,255,255,.15);padding:16px 24px;text-a
 .mapa-layout{display:grid;grid-template-columns:1fr;gap:18px;align-items:stretch}
 @media(max-width:900px){.mapa-layout{grid-template-columns:1fr}}
 
-#mapaMA{height:680px;border-radius:16px;border:1px solid var(--linha);box-shadow:var(--sombra-2);z-index:1;background:#dfe6e2}
+#mapaMA{height:680px;border-radius:16px;border:1px solid var(--linha);box-shadow:var(--sombra-2);z-index:1;background:#E4E9EE}
 @media(max-width:900px){#mapaMA{height:480px}}
 @media(max-width:520px){#mapaMA{height:360px}}
 
@@ -416,17 +439,20 @@ footer .base{border-top:1px solid rgba(255,255,255,.15);padding:16px 24px;text-a
       <div class="marca-simbolo"><span></span></div>
       <div><b>PVCIST</b><small>Embrapa Maranhão</small></div>
     </a>
-    <nav class="abas" role="tablist" aria-label="Seções">
-      <button role="tab" data-aba="inicio" class="ativa" aria-selected="true">Visão geral</button>
-      <button role="tab" data-aba="inovacao" aria-selected="false">Como fazer inovação social</button>
-      <button role="tab" data-aba="seguranca" aria-selected="false">Segurança alimentar</button>
-      <button role="tab" data-aba="valoracao" aria-selected="false">Valoração comunitária</button>
-      <button role="tab" data-aba="mapa" aria-selected="false">Mapa dinâmico · MA</button>
-      <button role="tab" data-aba="passoapasso" aria-selected="false">Passo a passo · MA</button>
-      <button role="tab" data-aba="equipe" aria-selected="false">Equipe</button>
-    </nav>
   </div>
 </header>
+
+<div class="appshell">
+<nav class="sidebar abas" role="tablist" aria-label="Seções">
+  <button role="tab" data-aba="inicio" class="ativa" aria-selected="true"><span class="ico" aria-hidden="true">🏠</span><span class="rotulo">Visão geral</span></button>
+  <button role="tab" data-aba="inovacao" aria-selected="false"><span class="ico" aria-hidden="true">💡</span><span class="rotulo">Como fazer inovação social</span></button>
+  <button role="tab" data-aba="seguranca" aria-selected="false"><span class="ico" aria-hidden="true">🌾</span><span class="rotulo">Segurança alimentar</span></button>
+  <button role="tab" data-aba="valoracao" aria-selected="false"><span class="ico" aria-hidden="true">📊</span><span class="rotulo">Valoração comunitária</span></button>
+  <button role="tab" data-aba="mapa" aria-selected="false"><span class="ico" aria-hidden="true">🗺️</span><span class="rotulo">Mapa dinâmico · MA</span></button>
+  <button role="tab" data-aba="passoapasso" aria-selected="false"><span class="ico" aria-hidden="true">🧭</span><span class="rotulo">Passo a passo · MA</span></button>
+  <button role="tab" data-aba="equipe" aria-selected="false"><span class="ico" aria-hidden="true">👥</span><span class="rotulo">Equipe</span></button>
+  <div class="sidebar-rodape">PVCIST · Embrapa Maranhão<br>Proposta conceitual v1.0 · 2026</div>
+</nav>
 
 <!-- ================= ABA 1 · VISÃO GERAL ================= -->
 <main>
@@ -534,7 +560,7 @@ footer .base{border-top:1px solid rgba(255,255,255,.15);padding:16px 24px;text-a
         <div class="cartao"><div class="icone i-barro">🌱</div><h3>RENIVA</h3><p>Rede de multiplicação de manivas-semente de mandioca com qualidade genética e sanitária — base alimentar de milhares de famílias no MA.</p></div>
         <div class="cartao"><div class="icone i-verde">🐄</div><h3>ILPF</h3><p>Integração Lavoura-Pecuária-Floresta: cultivo, criação e árvores no mesmo espaço — produtividade e recuperação de solos degradados.</p></div>
         <div class="cartao"><div class="icone i-sol">🥥</div><h3>Babaçu</h3><p>Extrativismo e agregação de valor aos produtos e subprodutos do babaçu — renda para quebradeiras de coco e comunidades tradicionais.</p></div>
-        <div class="cartao" style="background:var(--mata);border-color:var(--mata)"><h3 style="color:#fff">O papel ampliado da Embrapa MA</h3><p style="color:#D7E4DC">De unidade de pesquisa a arquiteta da inovação social territorial: curadoria científica, base tecnológica, Living Labs comunitários, interlocução institucional e referência nacional para replicação da PVCIST.</p></div>
+        <div class="cartao" style="background:var(--mata);border-color:var(--mata)"><h3 style="color:#fff">O papel ampliado da Embrapa MA</h3><p style="color:#D7E3EE">De unidade de pesquisa a arquiteta da inovação social territorial: curadoria científica, base tecnológica, Living Labs comunitários, interlocução institucional e referência nacional para replicação da PVCIST.</p></div>
       </div>
     </div>
   </section>
@@ -821,13 +847,6 @@ footer .base{border-top:1px solid rgba(255,255,255,.15);padding:16px 24px;text-a
       <div class="bloco-cab">
         <span class="eyebrow">Módulo 04 · Visualizações</span>
         <h2>Mapa dinâmico de valoração comunitária territorial</h2>
-        <p>Duas escalas no mesmo mapa: as <b>21 microrregiões geográficas do Maranhão</b> — unidades territoriais do Atlas da Bioeconomia Inclusiva, com seus limites reais — e, dentro delas, <b>141 comunidades e territórios menores</b> (quilombolas, terras indígenas, reservas extrativistas/UCs e distritos rurais), cada um com polígono oficial real onde ele existe ou um ponto aproximado quando não há demarcação formal. Clique em qualquer território ou comunidade para abrir o dossiê completo. Use o seletor de ano para ver a evolução histórica de população, PIB per capita e % de população rural.</p>
-      </div>
-
-      <div class="mapa-provenance">
-        <span class="ic">ℹ️</span>
-        <p><b>Procedência dos dados (atualizado em 06/08/2026).</b> Limites das 21 microrregiões: IBGE (malha municipal dissolvida). Indicadores de território — população, área, densidade, % rural, PIB per capita, % de agricultura familiar, Gini fundiário, nº de produtos de extração vegetal e territórios coletivos — foram <b>recalculados com fontes oficiais atuais</b> (IBGE Censo 2022, Censo Agropecuário 2017, PIB dos Municípios 2023, FUNAI, ICMBio/INDE, INCRA) e os índices compostos (valorações, IVC, IAC, INV, quadrante) foram refeitos com a mesma fórmula de normalização a partir deles. Os componentes de cobertura florestal, desmatamento, IVS, IDHM, % de pobreza e IPS ainda usam a estimativa original do <i>Atlas da Bioeconomia Inclusiva na Amazônia — Encarte Maranhão</i> (Embrapa, 2025) e não foram recalculados nesta rodada — o dossiê de cada território mostra exatamente quais campos já são <span class="tag-real real-sim">dado real atualizado</span> e quais seguem como <span class="tag-real real-nao">estimativa do Atlas 2025</span>. Metodologia completa e como contribuir com mais dados: ver README do projeto.
-        </p>
       </div>
 
       <div class="mapa-toolbar">
@@ -881,10 +900,10 @@ footer .base{border-top:1px solid rgba(255,255,255,.15);padding:16px 24px;text-a
         <div class="mapa-grupo" id="grupoTiposCom" style="display:none">
           <label>Tipos visíveis</label>
           <div class="mapa-segm" id="segTiposCom">
-            <button data-tipo="quilombola" class="on">⬤ Quilombola (80)</button>
-            <button data-tipo="indigena" class="on">⬤ Terra Indígena (20)</button>
-            <button data-tipo="uc" class="on">⬤ RESEX / UC (15)</button>
-            <button data-tipo="distrito" class="on">⬤ Distrito/povoado (26)</button>
+            <button data-tipo="quilombola" class="on"><span style="color:#E0722E">⬤</span> Quilombola (80)</button>
+            <button data-tipo="indigena" class="on"><span style="color:#1BAF7A">⬤</span> Terra Indígena (20)</button>
+            <button data-tipo="uc" class="on"><span style="color:#EDA100">⬤</span> RESEX / UC (15)</button>
+            <button data-tipo="distrito" class="on"><span style="color:#7A3FA7">⬤</span> Distrito/povoado (26)</button>
           </div>
         </div>
       </div>
@@ -920,6 +939,8 @@ footer .base{border-top:1px solid rgba(255,255,255,.15);padding:16px 24px;text-a
 
   <section class="bloco alt">
     <div class="container">
+      <p style="max-width:820px;color:var(--tinta-suave);margin-bottom:26px">Duas escalas no mesmo mapa: as <b>21 microrregiões geográficas do Maranhão</b> — unidades territoriais do Atlas da Bioeconomia Inclusiva, com seus limites reais — e, dentro delas, <b>141 comunidades e territórios menores</b> (quilombolas, terras indígenas, reservas extrativistas/UCs e distritos rurais), cada um com polígono oficial real onde ele existe ou um ponto aproximado quando não há demarcação formal. Clique em qualquer território ou comunidade para abrir o dossiê completo. Use o seletor de ano para ver a evolução histórica de população, PIB per capita e % de população rural.</p>
+
       <div class="bloco-cab">
         <span class="eyebrow">Metodologia · Motivos do cálculo</span>
         <h2>Como os índices de valoração são determinados</h2>
@@ -969,6 +990,13 @@ footer .base{border-top:1px solid rgba(255,255,255,.15);padding:16px 24px;text-a
           </ul>
         </div></div>
       </div>
+
+      <div class="mapa-provenance">
+        <span class="ic">ℹ️</span>
+        <p><b>Procedência dos dados (atualizado em 06/08/2026).</b> Limites das 21 microrregiões: IBGE (malha municipal dissolvida). Indicadores de território — população, área, densidade, % rural, PIB per capita, % de agricultura familiar, Gini fundiário, nº de produtos de extração vegetal e territórios coletivos — foram <b>recalculados com fontes oficiais atuais</b> (IBGE Censo 2022, Censo Agropecuário 2017, PIB dos Municípios 2023, FUNAI, ICMBio/INDE, INCRA) e os índices compostos (valorações, IVC, IAC, INV, quadrante) foram refeitos com a mesma fórmula de normalização a partir deles. Os componentes de cobertura florestal, desmatamento, IVS, IDHM, % de pobreza e IPS ainda usam a estimativa original do <i>Atlas da Bioeconomia Inclusiva na Amazônia — Encarte Maranhão</i> (Embrapa, 2025) e não foram recalculados nesta rodada — o dossiê de cada território mostra exatamente quais campos já são <span class="tag-real real-sim">dado real atualizado</span> e quais seguem como <span class="tag-real real-nao">estimativa do Atlas 2025</span>. Metodologia completa e como contribuir com mais dados: ver README do projeto.
+        </p>
+      </div>
+
       <p class="nota-fonte">Fontes dos indicadores — atualizado em 06/08/2026: Atlas da Bioeconomia Inclusiva na Amazônia — Encarte Maranhão (Embrapa, 2025), base original; IBGE Censo Demográfico 2022 (população, área, densidade, % rural, territórios quilombolas); IBGE Censo Agropecuário 2017 (% agricultura familiar, Gini fundiário, produtos de extração vegetal); IBGE Produto Interno Bruto dos Municípios 2010–2023; FUNAI (Terras Indígenas); ICMBio/INDE (Unidades de Conservação federais/RESEX); INCRA (delimitação de territórios quilombolas); OpenStreetMap/Nominatim (localização aproximada de distritos rurais). Ainda como estimativa do Atlas 2025, sem recálculo nesta rodada: cobertura florestal e desmatamento (MapBiomas/PRODES), IVS (IPEA, base 2010), IDHM (Atlas Brasil/PNUD, base 2010 — última edição oficial), % de pobreza e componentes do IPS-Brasil (Imazon). Normalização e priorização</p>
     </div>
   </section>
@@ -1117,6 +1145,7 @@ footer .base{border-top:1px solid rgba(255,255,255,.15);padding:16px 24px;text-a
 </section>
 </div>
 </main>
+</div>
 
 <footer>
   <div class="rodape-inner">
@@ -1216,9 +1245,9 @@ criarSimulador('controles-exante',[
   {nome:'Cultura da cooperação',peso:10},
   {nome:'Ambiente institucional',peso:10},
 ],'res-exante','classe-exante','desc-exante',(t)=>{
-  if(t>=7.5) return ['Alto potencial','#123B33','#DCEDE2','Índices altos indicam grupo com fortes condições estruturantes: priorize a iniciativa e avance para a cocriação e prototipagem.'];
-  if(t>=5) return ['Potencial moderado','#8a6410','#FBF0D6','Há base para inovar, mas eixos frágeis merecem fortalecimento prévio (ex.: formalização, articulação em redes, infraestrutura mínima).'];
-  return ['Potencial a construir','#B4552D','#F6E4DA','Recomenda-se etapa preparatória: fortalecer organização social, institucionalidade e capacidades locais antes de implantar protótipos.'];
+  if(t>=7.5) return ['Alto potencial','#0D366B','#DCE7F2','Índices altos indicam grupo com fortes condições estruturantes: priorize a iniciativa e avance para a cocriação e prototipagem.'];
+  if(t>=5) return ['Potencial moderado','#184F95','#E3EDF8','Há base para inovar, mas eixos frágeis merecem fortalecimento prévio (ex.: formalização, articulação em redes, infraestrutura mínima).'];
+  return ['Potencial a construir','#3A74B0','#EDF3FB','Recomenda-se etapa preparatória: fortalecer organização social, institucionalidade e capacidades locais antes de implantar protótipos.'];
 });
 
 criarSimulador('controles-ivct',[
@@ -1231,9 +1260,9 @@ criarSimulador('controles-ivct',[
   {nome:'IN · Inovação',peso:10},
   {nome:'RC · Resiliência Climática',peso:5},
 ],'res-ivct','classe-ivct','desc-ivct',(t)=>{
-  if(t>=7.5) return ['Valoração elevada','#123B33','#DCEDE2','Território com alto valor estratégico: apto a certificações, PSA, créditos de carbono e atração de investimentos.'];
-  if(t>=5) return ['Valoração intermediária','#8a6410','#FBF0D6','Território em desenvolvimento: os capitais com menor nota indicam onde direcionar tecnologias sociais e políticas públicas.'];
-  return ['Valoração inicial','#B4552D','#F6E4DA','Território prioritário para intervenção: alta relevância para investimentos públicos, segurança alimentar e inclusão socioprodutiva.'];
+  if(t>=7.5) return ['Valoração elevada','#0D366B','#DCE7F2','Território com alto valor estratégico: apto a certificações, PSA, créditos de carbono e atração de investimentos.'];
+  if(t>=5) return ['Valoração intermediária','#184F95','#E3EDF8','Território em desenvolvimento: os capitais com menor nota indicam onde direcionar tecnologias sociais e políticas públicas.'];
+  return ['Valoração inicial','#3A74B0','#EDF3FB','Território prioritário para intervenção: alta relevância para investimentos públicos, segurança alimentar e inclusão socioprodutiva.'];
 });
 
 /* ================= Infográfico: dados das 7 etapas ================= */
@@ -1411,7 +1440,7 @@ const METRICAS = {
   pct_rural:{nome:'% população rural',tipo:'escala',serieCampo:'pct_rural',get:metricaSerieGet('pct_rural')}
 };
 function quadNum(q){ return parseInt((q||'')[0])||4; }
-const QUAD_COR = {1:'#B4552D',2:'#E0A526',3:'#1F5FA8',4:'#6B7D73'};
+const QUAD_COR = {1:'#0D366B',2:'#2A78D6',3:'#1F5FA8',4:'#B7D3F6'};
 const QUAD_LABEL = {1:'Prioridade máxima',2:'Preparação prévia',3:'Vitrine / piloto',4:'Baixa prioridade'};
 
 /* ---------- séries históricas (evolução ao longo dos anos) ---------- */
@@ -1445,7 +1474,8 @@ function atualizarGrupoAno(){
 }
 
 /* ---------- comunidades e territórios menores (unidade abaixo da microrregião) ---------- */
-const COM_COR = {quilombola:'#B4552D', indigena:'#1F5FA8', uc:'#3E8464', distrito:'#E0A526'};
+/* cores categóricas de alto contraste — deliberadamente fora da família azul do choropleth das regiões, para que as comunidades se destaquem sobre qualquer tom de fundo */
+const COM_COR = {quilombola:'#E0722E', indigena:'#1BAF7A', uc:'#EDA100', distrito:'#7A3FA7'};
 const COM_LABEL = {quilombola:'Território quilombola', indigena:'Terra Indígena', uc:'Unidade de Conservação / RESEX', distrito:'Distrito ou povoado rural'};
 let camadaComunidades=null, comunidadesVisiveis=false;
 const tiposVisiveis = new Set(['quilombola','indigena','uc','distrito']);
@@ -1456,9 +1486,9 @@ function construirCamadaComunidades(){
     const cor=COM_COR[c.tipo];
     let layer;
     if(c.geometria){
-      layer=L.geoJSON(c.geometria,{style:()=>({color:cor,weight:1.4,fillColor:cor,fillOpacity:0.45})});
+      layer=L.geoJSON(c.geometria,{style:()=>({color:'#fff',weight:1.6,fillColor:cor,fillOpacity:0.82})});
     }else{
-      layer=L.circle(c.centro,{radius:c.raio_m||3000,color:cor,weight:1.4,fillColor:cor,fillOpacity:0.4,dashArray:'4,3'});
+      layer=L.circle(c.centro,{radius:c.raio_m||3000,color:'#fff',weight:1.6,fillColor:cor,fillOpacity:0.78,dashArray:'4,3'});
     }
     layer.bindPopup(popupComunidadeHTML(c),{maxWidth:320,minWidth:260});
     layer._comTipo=c.tipo;
@@ -1495,10 +1525,10 @@ function renderLegendaComunidades(){
     `<span class="chave"><span class="amostra" style="background:${COM_COR[t]}"></span>${COM_LABEL[t]}</span>`).join('');
 }
 
-/* escala sequencial palha → babaçu → mata (0..100) */
+/* escala sequencial institucional: azul-claro → azul-escuro (0..100), com mais saturação para destacar diferenças */
 function corEscala(v){
   v=Math.max(0,Math.min(100,v))/100;
-  const stops=[[239,233,216],[132,164,120],[62,132,100],[18,59,51]]; // palha-2, verde claro, babaçu, mata
+  const stops=[[164,201,242],[86,148,222],[35,100,184],[9,38,80]]; // azul-claro vivo, azul-médio, azul forte, azul-escuro profundo
   const seg=v*(stops.length-1); const i=Math.min(Math.floor(seg),stops.length-2); const t=seg-i;
   const a=stops[i],b=stops[i+1];
   const c=a.map((x,k)=>Math.round(x+(b[k]-x)*t));
@@ -1510,9 +1540,9 @@ function corDe(d,metricaKey){
   return corEscala(m.get(d));
 }
 function corTextoContraste(rgb){
-  const m=rgb.match(/\d+/g); if(!m) return '#1E2B27';
+  const m=rgb.match(/\d+/g); if(!m) return '#212529';
   const lum=(0.299*m[0]+0.587*m[1]+0.114*m[2]);
-  return lum>150?'#1E2B27':'#fff';
+  return lum>150?'#212529':'#fff';
 }
 
 /* ---------- estado do mapa ---------- */
@@ -1535,27 +1565,37 @@ function baseLayers(){
 
 function iniciarMapaMA(){
   if(mapaMA){ setTimeout(()=>mapaMA.invalidateSize(),120); return; }
-  mapaMA = L.map('mapaMA',{zoomControl:true, scrollWheelZoom:true, minZoom:5}).setView([-4.9,-45.3],6);
-  basesMapa = baseLayers();
-  basesMapa.normal.addTo(mapaMA);
+  const alvo = document.getElementById('mapaMA');
+  if(typeof L==='undefined'){
+    alvo.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;text-align:center;padding:20px;color:var(--tinta-suave)"><span style="font-size:2.2rem">🗺️⚠️</span><b style="color:var(--barro)">Não foi possível carregar a biblioteca do mapa (Leaflet).</b><span style="font-size:.86rem;max-width:380px">Verifique a conexão com a internet — o mapa depende de bibliotecas externas (unpkg.com / jsdelivr.net). Bloqueadores de anúncio/rede corporativa às vezes impedem o carregamento.</span><button class="btn-mini" onclick="location.reload()">🔄 Recarregar página</button></div>';
+    return;
+  }
+  try{
+    mapaMA = L.map('mapaMA',{zoomControl:true, scrollWheelZoom:true, minZoom:5}).setView([-4.9,-45.3],6);
+    basesMapa = baseLayers();
+    basesMapa.normal.addTo(mapaMA);
 
-  camadaGeo = L.geoJSON(DADOS_MAPA.geo,{
-    style: f=>estiloFeicao(f),
-    onEachFeature:(f,layer)=>{
-      const id=f.properties.micro_id;
-      layer.on('mouseover',()=>{ if(id!==selecionadoId) layer.setStyle({weight:3,color:'#123B33'}); layer.bringToFront(); });
-      layer.on('mouseout',()=>{ if(id!==selecionadoId) camadaGeo.resetStyle(layer); });
-      layer.on('click',()=>{ selecionar(id,layer); layer.bindPopup(popupHTML(id),{maxWidth:340,minWidth:300}).openPopup(); });
-    }
-  }).addTo(mapaMA);
+    camadaGeo = L.geoJSON(DADOS_MAPA.geo,{
+      style: f=>estiloFeicao(f),
+      onEachFeature:(f,layer)=>{
+        const id=f.properties.micro_id;
+        layer.on('mouseover',()=>{ if(id!==selecionadoId) layer.setStyle({weight:3,color:'#00264C'}); layer.bringToFront(); });
+        layer.on('mouseout',()=>{ if(id!==selecionadoId) camadaGeo.resetStyle(layer); });
+        layer.on('click',()=>{ selecionar(id,layer); layer.bindPopup(popupHTML(id),{maxWidth:340,minWidth:300}).openPopup(); });
+      }
+    }).addTo(mapaMA);
 
-  try{ mapaMA.fitBounds(camadaGeo.getBounds(),{padding:[12,12]}); }catch(e){}
-  construirCamadaComunidades();
-  ligarControles();
-  renderLegenda();
-  atualizarGrupoAno();
-  renderCompSeletor();
-  setTimeout(()=>mapaMA.invalidateSize(),150);
+    try{ mapaMA.fitBounds(camadaGeo.getBounds(),{padding:[12,12]}); }catch(e){}
+    construirCamadaComunidades();
+    ligarControles();
+    renderLegenda();
+    atualizarGrupoAno();
+    renderCompSeletor();
+    setTimeout(()=>mapaMA.invalidateSize(),150);
+  }catch(erro){
+    console.error('Falha ao iniciar o mapa dinâmico:', erro);
+    alvo.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;text-align:center;padding:20px;color:var(--tinta-suave)"><span style="font-size:2.2rem">🗺️⚠️</span><b style="color:var(--barro)">Ocorreu um erro ao montar o mapa.</b><span style="font-size:.86rem;max-width:380px">Tente recarregar a página. Se o problema persistir, abra o Console do navegador (F12) para ver os detalhes técnicos.</span><button class="btn-mini" onclick="location.reload()">🔄 Recarregar página</button></div>';
+  }
 }
 
 function estiloFeicao(f){
@@ -1565,9 +1605,9 @@ function estiloFeicao(f){
   const cor = corDe(d,metricaAtual);
   return {
     fillColor:cor,
-    fillOpacity: visivel?(id===selecionadoId?0.92:0.72):0.08,
-    color: id===selecionadoId?'#123B33':'#ffffff',
-    weight: id===selecionadoId?3.5:1.2,
+    fillOpacity: visivel?(id===selecionadoId?0.92:0.78):0.08,
+    color: id===selecionadoId?'#00264C':'#ffffff',
+    weight: id===selecionadoId?4:2,
     opacity: visivel?1:0.25
   };
 }
